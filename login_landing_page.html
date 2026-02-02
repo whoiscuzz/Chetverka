@@ -1,0 +1,1831 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html>
+
+<head>
+	<style>
+	
+
+	</style>
+	<meta charset="utf-8">
+	<title>
+		
+	
+
+	
+
+		ГУО &quot;Средняя школа № 4 г. Минска&quot;
+	</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width" />
+
+	<meta name="yandex-verification" content="13b73ef504bc6b97" />
+	
+
+	<link href="https://static.schools.by/stylesheets/subdomain/module-modal-verify-email.less" rel="stylesheet">
+	<link rel="icon" type="image/png" href="https://static.schools.by/favicon-32x32.png" />
+	<link href="https://static.schools.by/compiled/subdomain-9c734480e3.css" rel="stylesheet">
+	<link href="https://static.schools.by/javascripts/fancybox/jquery.fancybox.css" rel="stylesheet" media="screen">
+	<link href="https://static.schools.by/javascripts/jqueryui/jquery-ui.min.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+
+	<script src="https://static.schools.by/compiled/subdomain-vendor-4770a11cc9.js"></script>
+	<script src="https://static.schools.by/compiled/subdomain-app-3ae059bacb.js"></script>
+	
+
+	
+
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	<meta name="google-translate-customization" content="1ea95f8deee57830-c47aee7330d88ba3-gabf14e06360e3ee1-a" />
+	
+</head>
+
+
+<body onresize="onBodyResize()">
+	<script src="https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/Snow.min.js"></script>
+	
+	
+
+
+	
+
+<script>
+	(function() {
+	  const bc = new BroadcastChannel('schools-user-session');
+	  bc.postMessage(JSON.stringify({
+		'userIdentity': "47a7455b6a326185218d30c92aa97f9b29d2a48f"
+	  }));
+	})();
+</script>
+
+
+	
+		
+	
+	
+	<div class="finevision-settings" id="js-finevision-settings" style="display: none;">
+    <div class="row">
+        <div class="item">
+            <div class="title">
+                Шрифт
+            </div>
+            <div class="controls">
+                <a class="control font-sm" onclick="FINEVISION.changeFontSize(-1)">
+                    A&minus;
+                </a>
+                <a class="control font-lg" onclick="FINEVISION.changeFontSize(1)">
+                    A+
+                </a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Интервал
+            </div>
+            <div class="controls">
+                <a class="control" onclick="FINEVISION.changeLineHeight(-1)">
+                    &minus;
+                </a>
+                <a class="control" onclick="FINEVISION.changeLineHeight(+1)">
+                    +
+                </a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Цвет сайта
+            </div>
+            <div class="controls">
+                <a class="control color-white" onclick="FINEVISION.setColor('white')">
+                    ц
+                </a>
+                <a class="control color-black" onclick="FINEVISION.setColor('black')">
+                    ц
+                </a>
+                <a class="control color-blue" onclick="FINEVISION.setColor('blue')">
+                    ц
+                </a>
+                <a class="control color-brown" onclick="FINEVISION.setColor('brown')">
+                    ц
+                </a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Изображения
+            </div>
+            <div class="controls">
+                <a class="control" onclick="FINEVISION.setImageType('hidden')">
+                    выкл
+                </a>
+                <a class="control" onclick="FINEVISION.setImageType('gray')">
+                    ч/б
+                </a>
+                <a class="control" onclick="FINEVISION.setImageType('color')">
+                    цвет
+                </a>
+            </div>
+        </div>
+        <div class="item">
+            <div class="title">
+                Назад
+            </div>
+            <div class="controls">
+                <a class="control" onclick="FINEVISION.deactivate()">
+                    <span class="icon-eye-close icon-black"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+	<div id="system_msg" class="fixed"></div>
+
+<div id="layer_bg" class="fixed"></div>
+<div id="layer_wrap" class="fixed scroll_fix_wrap">
+	<div id="layer"></div>
+</div>
+
+<div id="box_layer_bg" class="fixed bg_dark"></div>
+<div id="box_layer_wrap" class="fixed scroll_fix_wrap">
+	<div id="box_layer">
+		<div id="box_loader"></div>
+	</div>
+</div>
+
+	
+
+<script>
+    var names_cookies = ["csrftoken", "slc_cookie", "sessionid"];
+    function all_delere_cookie(){
+        for (var i=0; i<getAllCookieNames().length; i++){
+            if (!names_cookies.includes(getAllCookieNames()[i])){
+                deleteCookie(getAllCookieNames()[i]);
+            }
+        };
+    }
+    function deleteCookie(name) {    
+        document.cookie = name + '=;expires=Sat, 01-Jan-2000 00:00:00 GMT;domain=.schools.my; path=/';
+        }
+    function getAllCookieNames() {
+        var cookies = document.cookie.split(';');
+        var cookieNames = [];
+        for (var i = 0; i < cookies.length; i++) {
+            var cookieName = cookies[i].split('=')[0].trim();
+            cookieNames.push(cookieName);
+        }
+        return cookieNames;
+    }
+    data_cookie = {
+        "static_cookie": "",
+        "advertising_cookie": "",
+    };
+    
+    (
+        function () {
+            $(document).ready(() => {
+                cookiePopup = FN.ge('cookie-main');
+                var cookiePopupBox = new MessageBox({
+                    title: false,
+                    width: 410,
+                    height: 'auto',
+                    animSpeed: 0,
+                    bodyStyle: '',
+                    dark: false,
+                    selfDestruct: true,
+                    progress: false,
+                    noCloseButton: false,
+                    hideOnBGClick: false,
+                    hideButtons: true,
+                    onShow: false,
+                    onHideAttempt: false,
+                    onBeforeHide: false,
+                    onHide: false,
+                    onClean: false,
+                    onDestroy: false,
+                    borderRadius: 0,
+                    boxTitleWrap: '<div></div>',
+                }).content(cookiePopup).show();
+                cookiePopup.style.display = 'flex';
+
+                $('#accept-cookies').click(() => {
+                    cookiePopupBox.hide();
+                    $.ajax({
+                        type: "POST",
+                        url: "/m/cookie-preferences",
+                        data: {
+                            static: true,
+                            advertising: true,
+                        },
+                        success: function (data) {
+                            location.reload();},
+                        error: function (data) {}
+                    });
+
+                })
+                $('#refuse-cookies').click(() => {
+                    cookiePopupBox.hide();
+                    $.ajax({
+                        type: "POST",
+                        url: "/m/cookie-preferences",
+                        data: {
+                            static: false,
+                            advertising: false,
+                        },
+                        success: function (data) {
+                            getAllCookieNames();
+                            location.reload();
+
+                        },
+                        error: function (data) {
+                        }
+                    });
+
+                })
+                
+                
+                $('#setup-cookies').click(() => {
+                    cookiePopupBox.hide();
+                    cookieSettings = FN.ge('cookie-settings');
+                    var cookieSettingsBox = new MessageBox({
+                        title: false,
+                        width: 410,
+                        height: 'auto',
+                        animSpeed: 0,
+                        bodyStyle: '',
+                        dark: false,
+                        selfDestruct: true,
+                        progress: false,
+                        noCloseButton: false,
+                        hideOnBGClick: false,
+                        hideButtons: true,
+                        onShow: false,
+                        onHideAttempt: false,
+                        onBeforeHide: false,
+                        onHide: false,
+                        onClean: false,
+                        onDestroy: false,
+                        borderRadius: 0,
+                        boxTitleWrap: '<div></div>',
+                    }).content(cookieSettings).show();
+                    cookieSettings.style.display = 'block';
+                    $('#submit_cookie_preferences').click(
+                        (e) => {
+                            e.preventDefault();
+                    if ((data_cookie["static_cookie"]==="") || (data_cookie["advertising_cookie"]===""))
+                        {
+                            if (data_cookie["static_cookie"]===""){
+                                document.getElementById("error_static_cookie").style.display='block';
+                            }
+                            else{
+                                document.getElementById("error_static_cookie").style.display='none';
+                            }
+
+                            if (data_cookie["advertising_cookie"]===""){
+                                document.getElementById("error_advertising_cookie").style.display='block';
+                            }
+                            else{
+                                document.getElementById("error_static_cookie").style.display='none';
+                            }
+                        }
+                        else
+                        {
+                            $.ajax({
+                                type: "POST",
+                                url: "/m/cookie-preferences",
+                                data: {
+                                    static: data_cookie["static_cookie"],
+                                    advertising: data_cookie["advertising_cookie"],
+                                },
+                                success: function (data) {
+                                    cookieSettingsBox.hide();
+                                    location.reload();},
+                                error: function (data) {
+                                    cookieSettingsBox.hide();}
+                                    });
+                        }
+                    });
+                    
+                });
+
+            })
+        }());
+
+
+        function alertopen(that){
+            id = that.getAttribute("id");
+            name = that.getAttribute("name");
+            my_div_yes = that.parentNode.parentNode.getElementsByClassName('alert_yes_consent')[0];
+
+            my_div_no = that.parentNode.parentNode.getElementsByClassName('alert_no_consent')[0];
+        if ((id.slice(-1)==1))
+        {
+            my_div_no.style.display = 'none';
+            my_div_yes.style.display = 'block';
+            data_cookie[name] = true;
+        }
+        else {
+            my_div_no.style.display = 'block';
+            my_div_yes.style.display = 'none';
+            data_cookie[name] = false;
+        }
+        
+    }
+</script>
+
+<div id="cookie-main" class="cookie-popup">
+    <p class="small-grey">Мы используем файлы cookie для обеспечения функционирования нашего сайта, а также сбора и
+        анализа информации
+        о
+        его работе. Вы можете разрешить все файлы cookie, нажав «Разрешить все», или управлять ими по отдельности,
+        нажав
+        «Настроить».
+        Нажимая «Разрешить все», вы даете согласие на обработку файлов cookie в соответствии с <a
+            href="https://schools.by/cookie-policy" target="_blank">Политикой обработки
+            файлов cookie</a>.</p>
+    <div class="cookie-buttons">
+        <button class="button_blue" id="accept-cookies">Разрешить все</button>
+        <button class="button_white" style="margin-right: 12px;" id="setup-cookies">Настроить</button>
+        <button class="button_white" id="refuse-cookies">Отказаться</button>
+    </div>
+
+</div>
+<div class="modalemail" id="popup-fade-cookies" style="display: none;">
+</div>
+<div id="cookie-settings" class="cookie-popup">
+    <p  class="small-grey" style="max-width: 900px; color: #333333;">
+        Вы можете настроить использование каждого типа файлов cookie, за исключением типа "функциональные (обязательные) cookie", 
+        без которых невозможно корректное функционирование сайта <a href="https://schools.by/" target="_blank">Schools.by</a> (далее - Сайт). Вы вправе изменить свой выбор настроек
+        файлов cookie (в т.ч. отозвать согласие) в любое время в настройках используемого браузера. Перед тем как совершить выбор
+        настроек параметров использования файлов cookie Вы можете ознакомиться с 
+        <a href="https://schools.by/cookie-policy" target="_blank">Политикой обработки файлов cookie</a>, а также со списком
+        файлов cookie, содержащим их описание и сроки хранения.
+    </p>
+    <form action="" id="cookie_preferences_form">
+        <input type="hidden" name="csrfmiddlewaretoken" value="u2Ir23VjSKCabKdgJynAXUFrZzLkeOjfyd6l22jjROGTNPm21tENTt7fAXGC7Ykj">
+        <ul>
+            <li><label>
+                    <div class="cookie-description">
+                        <p class="small-grey" style="color: #333333;">
+                            Функциональные файлы cookie. Эти файлы cookie необходимы для функционирования сайта и не могут быть отключены. 
+                            Вы можете настроить браузер таким образом, чтобы он блокировал эти файлы cookie или уведомлял вас об их использовании, 
+                            но в таком случае возможно, что некоторые разделы сайта не будут работать.</p>
+                            <div class="form_radio_btn_yes_cookie_gray">
+                                <input type="radio" name="function-cookie" id="function-cookie" value="yes" checked> 
+                                <label for="function-cookie" >Согласен(-на)</label> 
+                            </div>
+                    </div>
+                    
+                    <div class="clear"></div>
+                </label>
+            </li>
+            <li><label>
+                    <div class="cookie-description">
+                        <p class="small-grey" style="color: #333333;">Статистические файлы cookie. Эти файлы cookie настраиваются через наш сайт сторонними инструментами веб-аналитики. 
+                            Они могут использоваться для сбора данных о ваших интересах, посещаемых страницах и источниках трафика, чтобы оценивать и улучшать работу нашего сайта.</p>
+                            <p class="small-grey" style="margin-top: 5px;">Мы определяем ваши предпочтения и совершенствуем работу сайта</p>
+                            <div class="alert_yes_consent" >
+                                <div style="float: left; margin-right: 5px;">
+                                    <img src="https://static.schools.by/images/alert-circle-blue.svg" alt="">
+                                </div>
+                                <div>
+                                    При Вашем согласии на обработку статистических куки нам будет позволено определять Ваши предпочтения, 
+                                    в том числе наиболее и наименее популярные страницы и принимать меры по совершенствованию работы сайта исходя из ваших предпочтений
+                                </div>
+                            </div>
+                            <div class="alert_no_consent" >
+                                <div style="float: left; margin-right: 5px;">
+                                    <img src="https://static.schools.by/images/alert-circle.svg" alt="">
+                                </div>
+                                <div>
+                                    Отключение статистических куки не позволяет определять ваши предпочтения, 
+                                    в том числе наиболее и наименее популярные страницы и принимать меры по совершенствованию работы сайта исходя из ваших предпочтений
+                                </div>
+                            </div>
+                    
+                            <div class="form_radio_btn_yes_cookie">
+                                <input type="radio" name="static_cookie" id="static_cookie_1" value="yes" onclick="alertopen(this)"
+                                > 
+                                <label for="static_cookie_1">Согласен(-на)</label> 
+                            </div>
+                            <div class="form_radio_btn_no_cookie">
+                                <input type="radio" name="static_cookie" id="static_cookie_2" value="no" onclick="alertopen(this)"
+                                >
+                                <label for="static_cookie_2">Не согласен(-на)</label>
+                            </div>
+                            <div class="error_text" id="error_static_cookie">
+                                Пожалуйста, дайте свое согласие или отказ на установку различных файлов cookie
+                            </div>
+                    </div>
+                    
+                    <div class="clear"></div>
+                </label>
+            </li>
+            <li><label>
+                    <div class="cookie-description">
+                        <p class="small-grey" style="color: #333333;">Рекламные файлы cookie. На установку файлов cookie Рекламной Сети Яндекса и/или применение иных  
+                            средств трекинга пользовательской активности, а также использование данных, полученных Яндексом с их помощью</p>
+                            <p class="small-grey" style="margin-top: 5px;">Мы показать вам интересные и возможно выгодные рекламные предложения</p>
+                            <div class="alert_yes_consent" status="none">
+                                <div style="float: left; margin-right: 5px;">
+                                    <img src="https://static.schools.by/images/alert-circle-blue.svg" alt="" style="margin-top: -3px;">
+                                </div>
+                                <div>
+                                    В случае согласия на обработку рекламных куки мы сможем показать 
+                                    вам интересные и возможно выгодные рекламные предложения
+                                </div>
+                            </div>
+                            <div class="alert_no_consent" status="none" >
+                                <div style="float: left; margin-right: 5px;">
+                                    <img src="https://static.schools.by/images/alert-circle.svg" alt="">
+                                </div>
+                                <div>
+                                    В случае непредоставления согласия на обработку рекламных куки 
+                                    мы не сможем показать вам интересные и возможно выгодные рекламные предложения
+                                </div>
+                            </div>
+                            <div class="form_radio_btn_yes_cookie">
+                                <input type="radio" name="advertising_cookie" id="advertising_cookie_1" value="yes" onclick="alertopen(this)"
+                                > 
+                                <label for="advertising_cookie_1">Согласен(-на)</label> 
+                            </div>
+                            <div class="form_radio_btn_no_cookie">
+                                <input type="radio" name="advertising_cookie" id="advertising_cookie_2" value="no" onclick="alertopen(this)"
+                                >
+                                <label for="advertising_cookie_2">Не согласен(-на)</label>
+                            </div>
+                            <div class="error_text" id="error_advertising_cookie">
+                                Пожалуйста, дайте свое согласие или отказ на установку различных файлов cookie
+                            </div>
+                    </div>
+                    <div class="clear"></div>
+                </label>
+            </li>
+        </ul>
+        <p class="small-grey">Нажимая на кнопку «Принять настройки cookie», вы даёте согласие на обработку файлов cookie
+            в соответствии с
+            <a href="https://schools.by/cookie-policy" target="_blank">Политикой обработки файлов cookie</a>.</p>
+        <button type="submit" class="button_blue" id="submit_cookie_preferences">Сохранить</button>
+    </form>
+</div>
+
+	<script>
+		domStarted();
+	</script>
+
+	<div id="page_wrap" class="scroll_fix_wrap">
+
+		<div>
+
+			<div class="scroll_fix">
+
+				<div id="page_layout">
+					
+
+    
+
+					
+    
+        
+        
+        
+    
+
+
+
+					<div style="background: linear-gradient(157.28deg, #DDE0FC 106.48%, #F7F8FC 43.51%);">
+
+						<div class="top_line_wrap" style="height: 40px;;">
+
+							<div class="top_line"  style="padding-top: 5px; padding-left: 15px;">
+								<div class="fl_r">
+									
+
+
+
+
+
+
+
+<div class="sch_u_box">
+	<div class="sch_u_menu">
+		<ul class="sch_top_menu">
+			<li style="padding-top: 6px;">
+                <a class="u-" 
+				href="https://4minsk.schools.by/m/messages/1106490/in" 
+				title='Личные сообщения'>
+                    
+						<img src="https://static.schools.by/images/icons/email.png" style="vertical-align: middle; width: 18px;">
+					
+                </a>
+			</li>
+			<li>
+				<a class="u_name" href="https://4minsk.schools.by/pupil/1106490" title="Обучающийся 10 &quot;Б&quot;">
+                    <span>Ерошенко Е.</span>
+                </a>
+			</li>
+			<li class="no-brd no-padd no-top">
+				<a class="u_navigation" id="u_navigation_lnk" title='Дополнит. меню'><b class="gbma"></b></a>
+			</li>
+		</ul>
+
+		<div id="u_navigation_box" style="display: none;">
+			<div class="top_auth" >
+			<ul class="" style="min-width: 160px;
+			position: relative;">
+			<div style=" color: #506E92;">
+
+				
+			</div>
+				
+				<li style="margin: 8px 0px 8px 0px;">
+					
+						
+							
+								
+								<a href="https://4minsk.schools.by/pupil/1106490" style="min-height: 32px;text-decoration: none; ">
+									<div>
+										<img src="https://s3-minsk.cloud.mts.by/datastorage/cache/b1/d1/b1d180604b40fecc8af151311081da1c.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=w%2B9PLheCPTdTFXuCrcyWttX6MEc%3D&amp;Expires=2085326506" style="vertical-align: middle;  border-radius: 4px;"> 
+											<span 
+											class="short_name">Ерошенко Е.</span>
+										<img src="https://static.schools.by/images/icons/Vector.svg"
+										alt="Для " style=" float: right; padding-top: 6px;">
+									</div>
+								</a>
+							
+						
+					
+				</li>
+                
+    <li>
+        <a href="https://4minsk.schools.by/m/class/38379" style="text-decoration: none;"> 
+            <div>
+                <img src="https://static.schools.by/images/icons/icon_class.png" style="vertical-align: middle;  border-radius: 4px;"> 
+                    <span class="short_name_link">10 &quot;Б&quot;</span>
+                <img src="https://static.schools.by/images/icons/Vector.svg"
+                alt="Для " style=" float: right; padding-top: 6px;">
+            </div>
+        </a>
+    </li>
+
+				<div style="border: none;
+				margin: 12px 0px 12px 0px;
+				border-top: 1px solid #E2E7FF;"></div>
+				<li>
+					
+				
+					<a class="settings" href="https://4minsk.schools.by/m/pupil/1106490/settings" title='Настройки'><span>Настройки</span></a>
+				
+				</li>
+				<div style="border: none;
+				margin: 12px 0px 12px 0px;
+				border-top: 1px solid #E2E7FF;"></div>
+				<li style="margin-top: 10px;">
+					<a href="https://schools.by/m/logout" class="logout" style="text-decoration: none; ">
+						<div>
+						<span class="out">Выйти</span>
+						</div></a></li>
+			</ul>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+
+								</div>
+								<div class="left_part" style="width: 900px;">
+									
+
+
+
+<ul class="sch_top_menu">
+	<li><a class="main-logo" href="https://schools.by"><span>Schools.by</span></a></li>
+	<li><a href="https://schools.by/cost"><span>Тарифы</span></a></li>
+	<li><a href="https://schools.by/news"><span>Новости</span></a></li>
+	<li><a href="https://schools.by/help"><span>Помощь</span></a></li>
+	
+	<div class="finevision-element">
+		<a id="js-finevision-trigger" title="Версия для слабовидящих"
+			onclick="FINEVISION.activate()">
+			<img src="https://static.schools.by/images/icons/Eye.svg" 
+				alt="Для слабовидящих" style="vertical-align: middle; width: 17px; margin-right: 4px;"><span style="vertical-align: middle;">Для слабовидящих</span>
+		</a>
+	</div>
+	<li>
+        <a class="dashed" onclick="showSupportBox(event, '/m/support-box')"
+            title='Задать вопрос разработчикам (администраторам) портала  Schools.by'>
+            Техподдержка
+        </a>
+    </li>
+</ul>
+
+
+									<!-- language -->
+									<div id="google_translate_element" style="margin-left: 10px; padding-top: 10px;max-width: 100px;">
+										<a href="" class="link" style="margin-top: 8px;"><span style="margin-top: 8px;">RU/EN/BY</span></a>
+									</div>
+									
+									<div style="padding: 8px; float: left; margin-left: 8px;" >
+										<a href="#" class="" onclick="document.getElementById('popupsearch').style.display = 'flex'">
+											<img src="https://static.schools.by/images/icons/Search.svg" style="vertical-align: middle; width: 17px;">
+											<span style="color: azure;vertical-align: middle;">Поиск</span></a>
+									</div>
+
+									<div style="padding: 8px 8px 8px 8px; float: left;"><a href="https://schools.by/comm"><span style="color: azure;vertical-align: middle;">Реклама</span></a></div>
+
+								</div>
+								<div style="clear: both;"></div>
+							</div>
+						</div>
+						<div class="sch_header_wrap">
+
+							
+							
+
+<link href="https://fonts.googleapis.com/css?family=Oswald:400,700&display=swap" rel="stylesheet">
+<div id="header"  style="max-width: 1360px;margin: 0 auto; padding-left: 15px;">
+	<div  class="nopic"  style='display: grid; grid-template-columns: 120px 1fr;'  >
+		
+		<div class="">
+			<div class="sch_logo">
+				<a href="/m/" class="logo" style="min-width: 80px; min-height: 80px;">
+					
+                        
+						    <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/80/b0/80b0a3d857f9ab018cf870d56f28e02c.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=L4HmOYjP%2BCmDGdI0TcrSWH3oS0E%3D&amp;Expires=2085326506" alt="" id="logoimg"/>
+                        
+					
+				</a>
+				
+			</div>
+		</div>
+		
+			<div style="margin-top:32px; max-width: 1360px;">
+				<span class="name" ><a href="/m/">ГУО &quot;Средняя школа № 4 г. Минска&quot;</a></span>
+				
+				<div class="sch_slogan" >
+					
+						Электронные дневники и журналы
+					
+				</div>
+			</div>
+	</div>
+
+	
+</div>
+
+
+						</div>
+						<div class="main_grid_wrap">
+							
+							
+
+<style>
+
+
+</style>
+<div id="popupsearch" style="display: none;">
+	<div class="modalsearch">
+		<div class="modalformsearch">
+			<div class="closedsearch" onclick="document.getElementById('popupsearch').style.display = 'none'"></div>
+		<form id="google-search-form" method="get" action="/m/search">
+			<input type="hidden" name="csrfmiddlewaretoken" value="u2Ir23VjSKCabKdgJynAXUFrZzLkeOjfyd6l22jjROGTNPm21tENTt7fAXGC7Ykj">
+			
+				<input class="test" type="text" name="q" value="" placeholder='Поиск по сайту'/>
+			
+			<input class="btn " type="submit" value=""/>
+			<input class="btn_personal_all_blue" type="submit" value='Найти' style="right: 10px; width: 74px; height: 40px; margin: 0px 12px 0px 0px;"/>
+						
+		</form>
+	</div>
+    </div>
+</div>
+
+<script>
+	$('body').click(function (event)
+{	
+   if(!$(event.target).closest('#google-search-form').length && $(event.target).closest('#popupsearch').length) {
+     $("#popupsearch").hide();
+   }
+});
+</script>
+
+							<div class="main_grid bg_type0"
+								>
+								<div class="main_grid_left_column">
+									<!-- menu -->
+									
+
+<ul class="sch_menu_box">
+	
+		
+	
+    
+
+
+		
+    
+
+
+		
+    
+
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/administration">
+						Руководство школы
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/teachers">
+						Учительская
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/classes">
+						Классы
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/library">
+						Файловый архив
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/feedback">
+						Контактная информация
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+					<ul>
+
+                        
+
+
+                        
+					</ul>
+				
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/timetables">
+						Расписание
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+
+		
+
+
+			<li class="f1 closed">
+
+				<div class="d1">
+					<a href="/m/photoalbums">
+						Фотоальбомы
+					</a>
+					<i></i>
+
+                    
+				</div>
+                
+
+			</li>
+
+		
+    
+
+</ul>
+									
+
+    
+
+									
+									
+
+<div class="slc_box open green slc_news" cookie="slcNews">
+	<div class="slc_title">
+		<b>Новости проекта</b>
+		<span class="slc_arrow"></span>
+	</div>
+	<div class="slc_for_hide">
+		
+		<div class="slc_news_item">
+			<div class="text">С Новым годом!</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/81">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">С Днем учителя!</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/80">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">С праздником вас, с 1 сентября!</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/79">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Лето на финише, а мы — на старте нового учебного года!</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/78">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">С окончанием учебного года!</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/77">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Выставление четвертных отметок</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/76">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Согласование ГИАЦ</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/74">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Аттестат соответствия системы защиты информации</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/73">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Архив электронного дневника.</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/72">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Разъяснение ситуации с рекламой и предупреждением МАРТ</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/68">Подробнее тут</a></div>
+		</div>
+		
+		<div class="slc_news_item">
+			<div class="text">Обновленные функции Schools.by</div>
+			<div class="pp"><a target="_blank" href="https://schools.by/news/66">Подробнее тут</a></div>
+		</div>
+		
+	</div>
+</div>
+
+									
+
+									
+
+<ul class="sch_menu_box2">
+    
+		
+
+			<li data-alias="forget" class="f1 closed">
+				<div class="d1">
+                    <a href="/pages/forget">Если забыли (не знаете) пароль</a>
+                    <i></i>
+                </div>
+				
+			</li>
+			
+		
+    
+		
+    
+		
+
+			<li data-alias="vse-o-schoolsby" class="f1 closed">
+				<div class="d1">
+                    <a href="/pages/vse-o-schoolsby">Замечания и предложения</a>
+                    <i></i>
+                </div>
+				
+			</li>
+			
+		
+    
+		
+
+			<li data-alias="poleznye-ssylki" class="f1 closed">
+				<div class="d1">
+                    <a href="/pages/poleznye-ssylki">Полезные ссылки</a>
+                    <i></i>
+                </div>
+				
+			</li>
+			
+		
+    
+</ul>
+									
+
+									
+									<!-- // menu -->
+
+									
+									<!-- news -->
+									
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									<!-- // news -->
+
+									<!-- polls -->
+									
+									<!-- // polls -->
+
+									
+										
+									
+
+								</div>
+								<!--.main_grid_left_column-->
+								<div class="main_grid_center_column clearfix">
+									<div class="main_grid_content">
+										
+<div class="grid_st clearfix">
+    
+    <div class="grid_st_r paddt0">
+        
+	
+	
+	
+
+	<div class="r_user_info">
+		
+            <div class="ph">
+                <a href="/director/584038">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/03/c7/03c7846d7670c6f896baafb0c8837227.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=vuvDCubf8nMksA7xi%2BQPp%2BOAxaA%3D&amp;Expires=2085326506" alt="" />
+                    
+                </a>
+            </div>
+		
+		<p class="role">
+			<span class="ttc">директор</span>
+			школы
+		</p>
+		<p class="name"><a class="user_type_4" href="https://4minsk.schools.by/director/584038">Маляревич Наталья Владимировна</a></p>
+		<p class="tel">Телефон: (017)319-48-85</p>
+	</div>
+
+	<div class="rc_menu">
+
+        
+
+		
+        	<div class="rc_menu_item">
+				
+					Сегодня в электронные журналы  выставлено<br/>
+					<a href="/m/marks/statistics/today"><b>33 отметки</b></a>.
+					
+						Вчера - <a href="/m/marks/statistics/yesterday"><b>79</b></a>.
+					
+				
+        	</div>
+        
+	</div>
+
+    
+    
+    
+
+
+
+<a href="https://schools.by/cost">
+<img class="img-article-left" src="https://s3-minsk.cloud.mts.by/datastorage/banner_schools/160%D1%85600_ZOCsUJw.png?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=okVdHnKfersG9dHmBduBoCOz%2FSw%3D&amp;Expires=2085326506">
+</a>
+
+
+    
+
+
+    </div><!--.grid_st_r-->
+
+    <div class="grid_st_c">
+        
+    
+
+
+        
+	
+    
+
+
+
+
+
+<div class="sch_main_info island">
+	
+
+    <dl>
+        <dt>Официальное наименование:</dt>
+        <dd>Государственное учреждение образования &quot;Средняя школа № 4 г. Минска&quot;</dd>
+    </dl>
+
+    
+
+    
+        <dl>
+            <dt>Тип учреждения:</dt>
+            <dd>Учреждение общего среднего образования / Установа агульнай сярэдняй адукацыi</dd>
+        </dl>
+    
+
+    <dl>
+        <dt>Населенный пункт:</dt>
+        <dd>Ленинский район (Минск)</dd>
+    </dl>
+
+    <dl>
+        <dt>Адрес:</dt>
+        <dd>г. Минск, ул. Красноармейская, 11</dd>
+    </dl>
+
+    
+    <dl>
+        <dt>Телефоны:</dt>
+        <dd>
+            
+                
+                    <b>+375 17 390-71-97</b>
+                    
+                        (вахта)
+                    
+                    <br/>
+                
+                    <b>+375 17 319-48-85</b>
+                    
+                        (приемная)
+                    
+                    <br/>
+                
+                    <b>+375 17 390-64-64</b>
+                    
+                        (завучи)
+                    
+                    <br/>
+                
+            
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>E-mail:</dt>
+        <dd>
+            
+                <a href="mailto:sch4@minsk.edu.by">sch4@minsk.edu.by</a>
+            
+        </dd>
+    </dl>
+
+    
+
+    
+</div><!--.sch_main_info-->
+	
+	<div class="sch_about_box">
+		<div class="lim_height">
+			<div >
+				<div class="ast_box">
+					<article>
+					    <p>&nbsp; &nbsp; &nbsp; &nbsp;<strong>Наша школа </strong>- частичка нашего прекрасного города Минска. Она находится в его центре, как наша столица в центре нашей замечательной страны - Республики Беларусь.</p>
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp;Нашей школе более 100 лет. За это время столько сделано, так много достигнуто! У нашей школы прекрасная история. Её история - это история целого века. Каждый её миг был ярок и интересен.</p>
+
+<p>&nbsp; &nbsp; &nbsp; <strong>&nbsp;Миссия школы</strong> - <span style="font-size: 14px;"><em>дать поверить каждому маленькому ученику, что он всё умеет, что у него всё получится, не дать погаснуть огоньку радостных открытий в глазах каждого ребёнка.</em></span></p>
+
+<p><a class="link" href="http://sch4.minsk.edu.by/" style="">Перейти на официальный сайт школы</a>&nbsp;</p>
+					</article>
+				</div>
+			</div>
+
+			
+		</div>
+	</div><!--.sch_about_box-->
+
+	<div class="index_news">
+		<div class="grid_ttl">
+			<div class="grid_ttl_r">
+				
+			</div>
+			<div class="grid_ttl_mr1">
+				<h2><a href="/m/news">Новости</a></h2>
+			</div>
+		</div><!--.grid_ttl-->
+
+		<div class="sch_news_items">
+        
+            
+
+
+
+
+
+    <div class="sch_news_item">
+        
+            <div class="pict">
+                <a href="/m/news/2550089">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/70/3b/703bc78c4781c894edb2a6fe0971f333.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=xb4LYtCszLGHVwOKlsPvQNabynI%3D&amp;Expires=2085326506"/>
+                    
+                </a>
+            </div>
+        
+        <div class="cont">
+            <div class="title">
+                
+                <a href="/m/news/2550089">Объединение по интересам «Батлейка» представляет</a>
+            </div>
+            <div class="text"><p></p></div>
+            <div class="line_small">
+                <small>22 января в 15:11</small>
+                
+                    <span class="divide">|</span>
+                    <a class="user_type_6" href="/m/other-user/2599224">Милковский Е. Н.</a>
+                
+                <span class="divide">|</span>
+                
+                <a href="/m/news/2550089#comments">нет комментариев</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="sch_news_item">
+        
+            <div class="pict">
+                <a href="/m/news/2543780">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/00/e2/00e200a795e5600db9fbbb893711a765.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=aBOi9G6FhWTJJ2lL%2FJdjcV5M%2Br4%3D&amp;Expires=2085326506"/>
+                    
+                </a>
+            </div>
+        
+        <div class="cont">
+            <div class="title">
+                
+                <a href="/m/news/2543780">Торжественно завершилась вторая четверть!</a>
+            </div>
+            <div class="text"><p></p></div>
+            <div class="line_small">
+                <small>24 декабря 2025 в 13:45</small>
+                
+                    <span class="divide">|</span>
+                    <a class="user_type_6" href="/m/other-user/2599224">Милковский Е. Н.</a>
+                
+                <span class="divide">|</span>
+                
+                <a href="/m/news/2543780#comments">нет комментариев</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="sch_news_item">
+        
+            <div class="pict">
+                <a href="/m/news/2543332">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/0a/30/0a303ca59b75f294cedae8500a738daa.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=73%2BcUCCwIqoW2muJzDhxY3tjz7o%3D&amp;Expires=2085326506"/>
+                    
+                </a>
+            </div>
+        
+        <div class="cont">
+            <div class="title">
+                
+                <a href="/m/news/2543332">Поздравляем!</a>
+            </div>
+            <div class="text"><p></p></div>
+            <div class="line_small">
+                <small>22 декабря 2025 в 13:30</small>
+                
+                    <span class="divide">|</span>
+                    <a class="user_type_6" href="/m/other-user/2599224">Милковский Е. Н.</a>
+                
+                <span class="divide">|</span>
+                
+                <a href="/m/news/2543332#comments">нет комментариев</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="sch_news_item">
+        
+            <div class="pict">
+                <a href="/m/news/2541137">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/1f/e0/1fe096d4db6d20d14deba7710d501ec7.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=55f1lyLxzyguBkTBElPALk1%2FYE0%3D&amp;Expires=2085326506"/>
+                    
+                </a>
+            </div>
+        
+        <div class="cont">
+            <div class="title">
+                
+                <a href="/m/news/2541137">Рождественская благотворительная ярмарка</a>
+            </div>
+            <div class="text"><p></p></div>
+            <div class="line_small">
+                <small>13 декабря 2025 в 14:03</small>
+                
+                    <span class="divide">|</span>
+                    <a class="user_type_6" href="/m/other-user/2599224">Милковский Е. Н.</a>
+                
+                <span class="divide">|</span>
+                
+                <a href="/m/news/2541137#comments">нет комментариев</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="sch_news_item">
+        
+            <div class="pict">
+                <a href="/m/news/2536900">
+                    
+                        <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/78/a7/78a7795fe24aa33216b73c0cb7052c45.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=GKtdnbhp%2B6UFIAZ3Aw72yqHhU1M%3D&amp;Expires=2085326506"/>
+                    
+                </a>
+            </div>
+        
+        <div class="cont">
+            <div class="title">
+                
+                <a href="/m/news/2536900">Школа активного гражданина</a>
+            </div>
+            <div class="text"><p></p></div>
+            <div class="line_small">
+                <small>27 ноября 2025 в 14:13</small>
+                
+                    <span class="divide">|</span>
+                    <a class="user_type_6" href="/m/other-user/2599224">Милковский Е. Н.</a>
+                
+                <span class="divide">|</span>
+                
+                <a href="/m/news/2536900#comments">нет комментариев</a>
+                
+            </div>
+        </div>
+    </div>
+
+
+            
+			<div class="all_link_wrap">
+				<a href="/m/news">
+					<b>Все 317 новостей</b>
+				</a>
+			</div>
+			
+		
+		</div>
+	</div>
+
+	<div class="index_ph">
+		<div class="grid_ttl">
+			<div class="grid_ttl_r">
+				
+			</div>
+			<div class="grid_ttl_mr2">
+				<h2><a href="/m/photoalbums">Фотографии</a></h2>
+			</div>
+		</div><!--.grid_ttl-->
+        
+
+
+
+<div class="index_ph_box">
+    
+        <div class="index_ph_list_wrap">
+            <div id="index_ph_list">
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16807077">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/4d/0f/4d0f91a2567bd13343315e15cd7c34e0.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=dMxEjDgd12hjpJb787POuyLj32g%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16807076">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/ab/d5/abd55730c5b22e45d9cea28551cbea27.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=hNeHTFpZkgZIeITLAz1Qj%2BEg%2Bs4%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16807053">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/13/37/1337c7696d9a52713887dcddfda4824b.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=a%2F0kjrbyqHiYx0m99cq9%2FnDiO5A%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16783972">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/96/2a/962af43a3d74052928a42f1083d8f0aa.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=nC%2FWPrX0mDEnC0XvQyB4c9%2Fkp3U%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16783971">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/25/43/25430c441aad1c4c338bc492308ee003.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=MOxgmF8uI%2BFqNqa8INKmIPc3e74%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16783970">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/ea/f7/eaf7e9203ce3441850cce5c7ef437072.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=etYGdO0s2R4UgguFB7gWfhF8yjc%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16783969">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/b6/56/b6561e6e8bb00e182b0323c616bce8ad.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=tVFyrp%2B1YbbtfzMD00KESf5CSAo%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16783968">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/71/c5/71c5398f0f4063edd2a5bcc6e7343231.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=eJZz0QxkzDG4NmcZbeujvZg3vaU%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16782454">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/5a/6f/5a6fb4cc1a4a1f70b4ccc9818ecc155c.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=9mZ25uu3Pi%2Fan2Ucr4%2BtcfjC09s%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16775817">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/c9/14/c914f9d091b5d7272ddeb905c8175f55.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=J%2Bc6avXgTqk%2Bdlxxgv2WuEVRPxI%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16775816">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/9a/b1/9ab1127f8b23645fa8a48919d4429904.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=c9kNrkZ36ARpS8AAEYyynPBXc7Q%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16775815">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/64/d3/64d3aa3e2f0a08d108bb60aa923fd788.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=U7ja%2BELrVXvGnJQCI6Publh%2BhAo%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16775814">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/26/ad/26adc83312d60b7edcacd168155113a6.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=pDf8JWWeUTyF1fAM1HCdCDyG7sc%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16762982">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/93/d4/93d43a4f110e9c62d332dd4d14be512f.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=B1%2F8vdAgXBrKmqmmrvuIXiH2fao%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16762981">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/86/05/8605d63573fa6a90bac058f1e39ba58e.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=WUpijZHTzE4LRZPWYXSYa89WX0k%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16762980">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/23/4f/234f9dc05e650c0238e349c2041500e1.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=D5cF0QwjtNwwUx7GIawlZ6s%2BnDY%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16735503">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/b7/29/b7299d9dd862778b56f93a4b814ff4f9.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=h3x8kX11ijlkEDaWkThK0jR2uKk%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16735502">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/82/e0/82e0dba5a542728cf5db14ec3344918a.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=Cc8tNw5oMvcaaukulaCHomTSKLg%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16711352">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/ba/64/ba6428de6c0cd57c239b7c35c80040af.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=jwJyXd2WbkvbVXaHwwkDiOMTMkQ%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+                    <div class="ph">
+                        <a rel="group1" href="/m/photo/16711351">
+                            
+                                <img src="https://s3-minsk.cloud.mts.by/datastorage/cache/41/7a/417a46e3d2435b2eae57f4473d28dba6.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=DFVOO%2Fg7%2B6ewhLZkFzVovQdCd8s%3D&amp;Expires=2085326506" alt=""/>
+                            
+                        </a>
+                    </div>
+                
+            </div>
+        </div>
+        <div class="index_ph_bottom">
+            <div class="index_ph_arrs">
+                <a id="index_ph_prev">&nbsp;</a>
+                <a id="index_ph_next">&nbsp;</a>
+            </div>
+            <a class="all_link" href="/m/photoalbums">
+                <b>
+                    Все
+                    
+                    11 альбомов
+                </b>
+            </a>
+        </div>
+    
+</div>
+	</div><!--.index_photos-->
+
+	
+
+        
+    
+
+    </div>
+</div>
+
+									</div><!-- .main_grid_content -->
+								</div>
+								<!--.main_grid_center_column-->
+								<div class="clear"></div>
+							</div>
+							<!--.wrap_sch_content-->
+							
+							
+								
+    <div class="footer-banners" id="footer-banners">
+        <div class="footer-banners__content">
+            <div class="footer-banners__list js-footer-banners-slider">
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://edu.gov.by/" title="Министерство образования Республики Беларусь">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/banners/2017-08-31/img_3714183.jpg.gif?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=Jqir4y5k%2FPlWFjdsve%2BVmL2UhPI%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="115,33333333333333"
+                                 alt="Министерство образования Республики Беларусь"
+                                 title="Министерство образования Республики Беларусь">
+                        </a>
+                    </div>
+                
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://president.gov.by/" title="Сайт Президента Республики Беларусь">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/banners/2017-08-31/img_4028043.jpg.gif?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=bWr2enImIlgJ7sMmlZhBsYv3WYA%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="115,33333333333333"
+                                 alt="Сайт Президента Республики Беларусь"
+                                 title="Сайт Президента Республики Беларусь">
+                        </a>
+                    </div>
+                
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://www.adu.by/" title="Навукова-метадычная ўстанова &quot;Нацыянальны інстытут адукацыі&quot;">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/banners/2017-08-31/img_84723.jpg.gif?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=ZVAfjhEAan6nJkXbHTxKoJALee0%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="56,0"
+                                 alt="Навукова-метадычная ўстанова &quot;Нацыянальны інстытут адукацыі&quot;"
+                                 title="Навукова-метадычная ўстанова &quot;Нацыянальны інстытут адукацыі&quot;">
+                        </a>
+                    </div>
+                
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://olimp.minsk.edu.by/" title="Олимпиада школьников Союзного государства">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/4minsk/banners/2017-10-21/viber_image.jpeg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=txyNtfrzaPVr%2Fr%2BWZF1Ijmhb7bc%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="120,0"
+                                 alt="Олимпиада школьников Союзного государства"
+                                 title="Олимпиада школьников Союзного государства">
+                        </a>
+                    </div>
+                
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://mir.pravo.by/" title="Детский правовой сайт">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/banners/2017-08-31/img_30803.jpg.gif?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=qxwoJkfZn7dBnjzrSvdJfoFH0Ao%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="80,0"
+                                 alt="Детский правовой сайт"
+                                 title="Детский правовой сайт">
+                        </a>
+                    </div>
+                
+            
+                
+                    <div class="footer-banners__item">
+                        <a target="_blank" href="http://www.edu.by/" title="Белорусский национальный образовательный Интернет-портал">
+                            <img src="https://s3-minsk.cloud.mts.by/datastorage/banners/2017-08-31/img_33483.jpg?AWSAccessKeyId=3b68d8fb703f1d7de071&amp;Signature=SlRjAV7aeEyrPoSf%2BX0CTX7xhis%3D&amp;Expires=2085326506"
+                                 height="40"
+                                 width="76,16438356164383"
+                                 alt="Белорусский национальный образовательный Интернет-портал"
+                                 title="Белорусский национальный образовательный Интернет-портал">
+                        </a>
+                    </div>
+                
+            
+            </div>
+
+            <div class="footer-banners__nav">
+                <a class="footer-banners__nav-prev" id="footer-banners-prev" style="display: none;"></a>
+                <a class="footer-banners__nav-next" id="footer-banners-next" style="display: none;"></a>
+            </div>
+        </div>
+
+    
+    </div>
+
+
+							
+							
+
+							
+
+
+<div id="footer">
+	<div class="cont_part">
+		<div class="line-1">
+            <div class="info">
+                
+                    <p class="tel">
+                        
+                        <b>Телефоны</b>:
+                        
+                        +375 17 390-71-97, +375 17 319-48-85, +375 17 390-64-64
+                    </p>
+                
+                
+                    <p>
+                        <b>Email:</b> sch4@minsk.edu.by
+                    </p>
+                
+            </div>
+
+			<div class="madein">
+				&copy; 2011 - 2026
+			    ООО "Образовательные системы"
+				<ul>
+                    
+                        
+                            <li><a href="https://schools.by/help/2/item/31" target="_blank">Белорусский дневник школьника
+</a></li>
+                        
+                        
+                    
+				</ul>
+			</div>
+			<div class="footer_menu">
+				<ul>
+					<li><a href="/m/">Главная страница</a></li>
+					<li class="sep"></li>
+					<li><a href="/m/feedback">Контактная информация</a></li>
+					<li class="sep"></li>
+					<li><a href="/m/news">Новости</a></li>
+					<li class="sep"></li>
+					<li><a href="/m/sitemap">Карта сайта</a></li>
+					
+						<li class="sep"></li>
+						<li><a href="/" onclick="doFullVersion();">Полная версия</a></li>
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+</div><!--#footer-->
+								<div id="footer">
+								<div class="cont_part">
+									<div class="line-1">
+									<div class="footer_menu" style="margin: auto;">
+											<ul>
+												<li><a href="https://schools.by/pd-policy">Политика обработки персональных данных</a></li>
+												<li><a href="https://schools.by/cookie-policy">Политика в отношении обработки cookie</a></li>
+												<li><a href="https://schools.by/offer-b2b">Оферта с учреждениями образования</a></li>
+												<li><a href="https://schools.by/offer">Оферта с пользователями «Расширенного пакета»</a></li>
+												<li><a href="https://schools.by/terms">Пользовательское соглашение</a></li>
+												
+											</ul>
+										</div>	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="overlay"></div>
+	
+
+
+
+<script>
+	(function(){
+		$('.popup-result .close').click(function(){
+			$('.popup-result').hide();
+		});
+
+	    var timeout = 8000;
+		setTimeout(function(){
+			$('.popup-result').fadeOut(1500);
+		}, timeout);
+	}());
+</script>
+
+	<script>
+		domReady();
+	</script>
+
+</body>
+
+</html>
