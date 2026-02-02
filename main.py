@@ -132,7 +132,6 @@ def login(username, password):
         headers={"User-Agent": "Mozilla/5.0"},
         impersonate="chrome110"
     ) as s:
-        # 1. Получаем страницу входа и CSRF токен
         login_url = "https://schools.by/login"
         try:
             r_get = s.get(login_url, timeout=10)
