@@ -35,8 +35,7 @@ def fetch_week(session, pupil_id: str, week_date: str):
     if not week_block:
         # Если блок не найден, это может быть нормально для недели без уроков.
         print(f"Warning: No 'div.db_days' found for week {week_date}. It might be an empty week.")
-        
-        # Дополнительно проверим, есть ли кнопка "next", чтобы не прерывать цикл зря
+
         next_btn = soup.select_one("a.next")
         next_week = next_btn.get("next_week_id") if next_btn else None
         return None, next_week
