@@ -146,7 +146,6 @@ def login(username, password):
             print(f"Error getting CSRF token: {e}")
             return None
 
-        # 2. Отправляем данные для входа
         login_data = {
             "csrfmiddlewaretoken": csrf_token,
             "username": username,
@@ -162,7 +161,6 @@ def login(username, password):
             print(f"Error during login POST: {e}")
             return None
 
-        # 3. Проверяем, успешный ли вход и ищем Pupil ID
         if 'sessionid' not in s.cookies:
             print("Login failed: sessionid not in cookies")
             return None
