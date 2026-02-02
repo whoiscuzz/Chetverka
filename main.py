@@ -88,7 +88,6 @@ def parse_quarter(session, pupil_id: str):
     return all_rows
 
 def structure_for_ios(rows):
-    # Группируем уроки по дате (YYYY-MM-DD) и по неделям
     weeks_map = defaultdict(lambda: defaultdict(lambda: {'name': '?', 'lessons': []}))
     for r in rows:
         monday = get_monday(r["date"])
