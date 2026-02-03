@@ -5,7 +5,7 @@ struct LessonRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            // Иконка предмета
+
             Image(systemName: icon(for: lesson.safeSubject))
                 .font(.title3)
                 .foregroundColor(.accentColor)
