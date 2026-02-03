@@ -59,7 +59,6 @@ struct DiaryAPI {
             }
             
             guard (200...299).contains(httpResponse.statusCode) else {
-                // Попробуем декодировать ошибку от FastAPI
                 if let data = data, let apiError = try? JSONDecoder().decode(ApiError.self, from: data) {
                     completion(.failure(.apiError(apiError.detail)))
                 } else {
