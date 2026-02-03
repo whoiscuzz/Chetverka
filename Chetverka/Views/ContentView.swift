@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Chetverka
-//
-//  Created by whoiscuzz on 25.01.26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
