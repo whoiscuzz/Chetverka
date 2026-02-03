@@ -38,7 +38,7 @@ struct DiaryView: View {
         }
     }
 
-    // MARK: - Заголовок недели
+
     private var weekHeader: some View {
         HStack {
             Button {
