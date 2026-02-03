@@ -40,25 +40,25 @@ final class AnalyticsViewModel: ObservableObject {
                     )
                 }
             
-            // --- Лучшие и худшие ---
+
             let sortedByAverage = subjectAverages.sorted { $0.1 > $1.1 }
             let best = Array(sortedByAverage.prefix(5))
             let weak = Array(subjectAverages.filter { $0.1 < 6.5 }.sorted { $0.1 < $1.1 }.prefix(5))
 
-            // --- Данные для диаграммы по количеству оценок ---
+
             let colors: [Color] = [.blue, .green, .orange, .purple, .pink, .red, .yellow]
 
-            // 1. Сортируем предметы по количеству оценок
+
             let sortedByCount = subjectMarks.sorted { $0.value.count > $1.value.count }
 
-            // 2. Берем только первые N для отображения
+
             let topSubjects = sortedByCount.prefix(colors.count)
 
-            // 3. Преобразуем в финальную модель для View, используя .count (Int)
+
             let slices = topSubjects.enumerated().map { index, item in
                 SubjectSlice(
                     subject: item.key.capitalized,
-                    value: item.value.count, // Используем .count, который является Int
+                    value: item.value.count,
                     color: colors[index % colors.count]
                 )
             }
