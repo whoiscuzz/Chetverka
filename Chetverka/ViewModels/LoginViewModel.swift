@@ -1,10 +1,3 @@
-//
-//  LoginViewModel.swift
-//  Chetverka
-//
-//  Created by whoiscuzz on 26.01.26.
-//
-
 import Foundation
 import Combine
 
@@ -14,13 +7,11 @@ final class LoginViewModel: ObservableObject {
     @Published var password = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
-    
-    // Этот флаг будет сигнализировать ContentView, что вход успешен
+
     @Published var isAuthenticated = false
 
     private var cancellables = Set<AnyCancellable>()
-    
-    // URL вашего локального сервера FastAPI
+
     private let loginURL = URL(string: "http://192.168.0.113:8000/login")!
 
     func login() {
