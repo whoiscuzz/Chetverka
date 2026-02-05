@@ -11,11 +11,9 @@ class LoginRequest(BaseModel):
 
 @app.post("/login")
 def login_route(login_request: LoginRequest):
-    # login теперь возвращает словарь или None
     login_data = login(login_request.username, login_request.password)
     if not login_data:
         raise HTTPException(status_code=401, detail="Invalid credentials or login failed")
-    # Возвращаем словарь с sessionid и pupilid
     return login_data
 
 @app.get("/parse")
