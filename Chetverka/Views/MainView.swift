@@ -1,9 +1,3 @@
-//
-//  MainView.swift
-//  Chetverka
-//
-//  Created by whoiscuzz on 26.01.26.
-//
 
 import SwiftUI
 
