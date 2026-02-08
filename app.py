@@ -19,7 +19,6 @@ def login_route(login_request: LoginRequest):
 @app.get("/parse")
 def parse(sessionid: str, pupilid: str):
     try:
-        # Передаем оба параметра в get_quarter
         raw_list = get_quarter(sessionid, pupilid)
 
         if not raw_list:

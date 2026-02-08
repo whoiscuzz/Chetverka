@@ -170,9 +170,7 @@ def login(username, password):
             print("Login failed: Invalid credentials message found")
             return None
 
-        # 4. Ищем Pupil ID и парсим профиль
         try:
-            # Сначала убеждаемся, что мы на мобильной версии главной страницы
             main_page_url = f"{BASE}/m/"
             main_page = s.get(main_page_url, timeout=10)
             main_page.raise_for_status()
@@ -190,27 +188,23 @@ def login(username, password):
                 
             pupil_id = id_match.group(1)
             session_id = s.cookies.get("sessionid")
-            
-            # 5. Теперь идем на страницу профиля за детальной информацией
-            profile_page_url = f"{BASE}/pupil/{pupil_id}/" # Убираем /m/
+
+            profile_page_url = f"{BASE}/pupil/{pupil_id}/"
             profile_page = s.get(profile_page_url, timeout=10)
             profile_page.raise_for_status()
             profile_soup = BeautifulSoup(profile_page.text, 'html.parser')
 
             profile_data = {}
 
-            # Имя и класс
             title_box = profile_soup.find("div", class_="title_box")
             if title_box and title_box.h1:
                 full_title = title_box.h1.get_text(strip=True)
-                # "Ерошенко Ефим, 10 "Б" класс, ID 1106490"
                 name_part = full_title.split(',')[0].strip()
                 class_part_match = re.search(r",\s*(.*?)\s*класс", full_title)
                 profile_data["fullName"] = name_part
                 if class_part_match:
                     profile_data["className"] = class_part_match.group(1)
 
-            # Аватар
             avatar_box = profile_soup.find("div", class_="profile-photo__box")
             if avatar_box and avatar_box.img and avatar_box.img.has_attr('src'):
                 profile_data["avatarUrl"] = avatar_box.img['src']

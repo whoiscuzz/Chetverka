@@ -74,6 +74,23 @@
 3.  **Запустите приложение:**
     Выберите нужный симулятор или реальное устройство и нажмите "Run" (▶).
 
+### Android (Kotlin + Compose)
+
+1.  **Откройте Android-проект в Android Studio:**
+    Откройте папку `android-app`.
+
+2.  **Синхронизируйте Gradle:**
+    Нажмите `Sync Project with Gradle Files`.
+
+3.  **Проверьте URL бэкенда:**
+    В `android-app/app/build.gradle.kts` используется:
+    - debug: `http://10.0.2.2:8000/` (эмулятор Android)
+    - release: `http://192.168.0.113:8000/` (физическое устройство в локальной сети)
+
+4.  **Запустите бэкенд и Android-приложение:**
+    - Бэкенд: `uvicorn app:app --host 0.0.0.0 --port 8000`
+    - Android: кнопка Run в Android Studio.
+
 ## API Эндпоинты
 
 *   `POST /login`
