@@ -7,7 +7,7 @@
         android:allowBackup="true"
         android:label="Chetverka"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault.DayNight"
+        android:theme="@style/Theme.Chetverka"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".MainActivity"
