@@ -1,4 +1,4 @@
-#Sat Feb 07 01:20:57 MSK 2026
+#Sun Feb 08 21:47:22 MSK 2026
 base.0=/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
 base.2=/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/build/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex

@@ -1,5 +1,6 @@
 package by.schools.chetverka.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +32,7 @@ import by.schools.chetverka.data.api.ProfileDto
 import by.schools.chetverka.ui.theme.BlueDeep
 import by.schools.chetverka.ui.theme.BluePrimary
 import by.schools.chetverka.ui.theme.BlueSky
+import by.schools.chetverka.ui.theme.CardWhite
 
 @Composable
 fun ProfileScreen(
@@ -48,12 +51,15 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = padding.calculateTopPadding() + 12.dp),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            shape = RoundedCornerShape(30.dp),
+            colors = CardDefaults.cardColors(containerColor = CardWhite),
+            border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp)
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Card(
                     shape = CircleShape,
@@ -62,11 +68,11 @@ fun ProfileScreen(
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = profile?.fullName?.firstOrNull()?.uppercase() ?: "👤",
-                            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally),
                             style = MaterialTheme.typography.headlineMedium,
                             color = BlueDeep,
                             fontWeight = FontWeight.Bold
@@ -100,7 +106,8 @@ fun ProfileScreen(
         OutlinedButton(
             onClick = onReload,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(18.dp),
+            border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.8f))
         ) {
             Icon(
                 imageVector = Icons.Rounded.Refresh,
@@ -112,7 +119,7 @@ fun ProfileScreen(
         Button(
             onClick = onLogout,
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(18.dp),
             colors = ButtonDefaults.buttonColors(containerColor = BluePrimary)
         ) {
             Icon(
@@ -125,8 +132,9 @@ fun ProfileScreen(
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            shape = RoundedCornerShape(22.dp),
+            colors = CardDefaults.cardColors(containerColor = CardWhite),
+            border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
         ) {
             Column(
                 modifier = Modifier.padding(14.dp),

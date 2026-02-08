@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.EmojiEvents
@@ -33,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +51,7 @@ import by.schools.chetverka.ui.screens.DiaryScreen
 import by.schools.chetverka.ui.screens.ProfileScreen
 import by.schools.chetverka.ui.screens.ResultsScreen
 import by.schools.chetverka.ui.theme.BluePrimary
+import by.schools.chetverka.ui.theme.BlueSoft
 import by.schools.chetverka.ui.theme.BlueSky
 import by.schools.chetverka.ui.theme.CardWhite
 
@@ -96,31 +101,44 @@ private fun MainTabs(
     Scaffold(
         containerColor = Color.Transparent,
         bottomBar = {
-            Surface(
-                color = CardWhite.copy(alpha = 0.97f),
-                tonalElevation = 8.dp,
-                shadowElevation = 16.dp
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
             ) {
-                NavigationBar(containerColor = Color.Transparent) {
-                    Tab.entries.forEach { tab ->
-                        NavigationBarItem(
-                            selected = selectedTab == tab,
-                            onClick = { selectedTab = tab },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = BluePrimary,
-                                selectedTextColor = BluePrimary,
-                                indicatorColor = BlueSky.copy(alpha = 0.7f),
-                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            icon = {
-                                Icon(
-                                    imageVector = tab.icon,
-                                    contentDescription = tab.title
-                                )
-                            },
-                            label = { Text(tab.title) }
-                        )
+                Surface(
+                    color = CardWhite.copy(alpha = 0.96f),
+                    tonalElevation = 10.dp,
+                    shadowElevation = 20.dp,
+                    shape = RoundedCornerShape(34.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    NavigationBar(
+                        containerColor = Color.Transparent,
+                        tonalElevation = 0.dp,
+                        modifier = Modifier.height(70.dp)
+                    ) {
+                        Tab.entries.forEach { tab ->
+                            NavigationBarItem(
+                                selected = selectedTab == tab,
+                                onClick = { selectedTab = tab },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = BluePrimary,
+                                    selectedTextColor = BluePrimary,
+                                    indicatorColor = BlueSky.copy(alpha = 0.72f),
+                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                ),
+                                icon = {
+                                    Icon(
+                                        imageVector = tab.icon,
+                                        contentDescription = tab.title,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                },
+                                label = { Text(tab.title) }
+                            )
+                        }
                     }
                 }
             }
@@ -163,12 +181,24 @@ private fun AppBackground(content: @Composable () -> Unit) {
                 Brush.verticalGradient(
                     colors = listOf(
                         Color.White,
-                        BlueSky.copy(alpha = 0.55f),
+                        BlueSoft,
+                        BlueSky.copy(alpha = 0.52f),
                         Color.White
                     )
                 )
             )
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(BlueSky.copy(alpha = 0.55f), Color.Transparent),
+                        center = Offset(180f, 80f),
+                        radius = 1200f
+                    )
+                )
+        )
         content()
     }
 }
@@ -181,9 +211,12 @@ private fun FullScreenLoader() {
             .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
-        Card {
+        Card(
+            shape = RoundedCornerShape(32.dp),
+            colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = CardWhite)
+        ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 22.dp),
+                modifier = Modifier.padding(horizontal = 26.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -203,32 +236,48 @@ fun EmptyState(
     subtitle: String,
     padding: PaddingValues
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .padding(padding)
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "☁️",
-            style = MaterialTheme.typography.displaySmall
-        )
-        Text(
-            text = title,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 6.dp)
-        )
-        Text(
-            text = subtitle,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+        Card(
+            shape = RoundedCornerShape(30.dp),
+            colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = CardWhite.copy(alpha = 0.97f))
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 26.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Card(
+                    shape = CircleShape,
+                    colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = BlueSky.copy(alpha = 0.75f))
+                ) {
+                    Text(
+                        text = "☁️",
+                        style = MaterialTheme.typography.displaySmall,
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
+                    )
+                }
+                Text(
+                    text = title,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+                Text(
+                    text = subtitle,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        }
     }
 }
 

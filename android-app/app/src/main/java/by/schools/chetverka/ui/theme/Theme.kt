@@ -1,7 +1,6 @@
 package by.schools.chetverka.ui.theme
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -47,7 +46,8 @@ fun ChetverkaTheme(
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColors else LightColors,
-        typography = Typography(),
+        typography = AppTypography,
+        shapes = AppShapes,
         content = content
     )
 }

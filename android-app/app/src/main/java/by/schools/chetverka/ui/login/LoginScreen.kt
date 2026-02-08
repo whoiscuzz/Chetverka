@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Lock
@@ -14,10 +17,12 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +38,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.theme.BlueDeep
 import by.schools.chetverka.ui.theme.BluePrimary
+import by.schools.chetverka.ui.theme.BlueSoft
 import by.schools.chetverka.ui.theme.BlueSky
+import by.schools.chetverka.ui.theme.CardWhite
 
 @Composable
 fun LoginScreen(
@@ -51,7 +58,7 @@ fun LoginScreen(
                 Brush.verticalGradient(
                     colors = listOf(
                         Color.White,
-                        BlueSky.copy(alpha = 0.8f),
+                        BlueSky.copy(alpha = 0.9f),
                         Color.White
                     )
                 )
@@ -61,42 +68,52 @@ fun LoginScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            shape = RoundedCornerShape(28.dp)
+                .padding(horizontal = 20.dp)
+                .widthIn(max = 460.dp),
+            shape = RoundedCornerShape(34.dp),
+            colors = CardDefaults.cardColors(containerColor = CardWhite.copy(alpha = 0.98f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 18.dp, vertical = 24.dp),
+                    .padding(horizontal = 20.dp, vertical = 26.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
                     text = "Четвёрка",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     color = BlueDeep
                 )
                 Text(
-                    text = "Красивый дневник schools.by",
+                    text = "Вход в аккаунт schools.by",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Spacer(modifier = Modifier.height(2.dp))
 
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
                     label = { Text("Логин") },
                     singleLine = true,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = BluePrimary,
+                        focusedContainerColor = BlueSoft,
+                        unfocusedContainerColor = BlueSoft.copy(alpha = 0.72f),
+                        unfocusedBorderColor = BlueSky,
+                        focusedLeadingIconColor = BluePrimary,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Rounded.Person,
                             contentDescription = null
                         )
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
@@ -105,7 +122,15 @@ fun LoginScreen(
                     label = { Text("Пароль") },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = BluePrimary,
+                        focusedContainerColor = BlueSoft,
+                        unfocusedContainerColor = BlueSoft.copy(alpha = 0.72f),
+                        unfocusedBorderColor = BlueSky,
+                        focusedLeadingIconColor = BluePrimary,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Rounded.Lock,
@@ -126,11 +151,11 @@ fun LoginScreen(
                 Button(
                     onClick = { onLogin(username, password) },
                     enabled = !isLoading,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(18.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BluePrimary),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 4.dp)
+                        .padding(top = 6.dp)
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
@@ -141,7 +166,7 @@ fun LoginScreen(
                     } else {
                         Text(
                             "Войти",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
                     }

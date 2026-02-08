@@ -1,5 +1,6 @@
 package by.schools.chetverka.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,14 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,9 +26,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.DiaryUiState
@@ -37,6 +41,8 @@ import by.schools.chetverka.ui.theme.AccentWarning
 import by.schools.chetverka.ui.theme.BlueDeep
 import by.schools.chetverka.ui.theme.BluePrimary
 import by.schools.chetverka.ui.theme.BlueSecondary
+import by.schools.chetverka.ui.theme.BlueSky
+import by.schools.chetverka.ui.theme.CardWhite
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -51,9 +57,10 @@ fun DashboardScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator(modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally))
+            CircularProgressIndicator()
         }
         return
     }
@@ -71,7 +78,7 @@ fun DashboardScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
         contentPadding = PaddingValues(
             start = 0.dp,
             top = padding.calculateTopPadding() + 14.dp,
@@ -140,9 +147,27 @@ private fun StatRow(
     value3: String
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-        StatCard(title = title1, value = value1, modifier = Modifier.weight(1f))
-        StatCard(title = title2, value = value2, modifier = Modifier.weight(1f))
-        StatCard(title = title3, value = value3, modifier = Modifier.weight(1f))
+        StatCard(
+            title = title1,
+            value = value1,
+            icon = Icons.Rounded.CalendarToday,
+            tint = BluePrimary,
+            modifier = Modifier.weight(1f)
+        )
+        StatCard(
+            title = title2,
+            value = value2,
+            icon = Icons.Rounded.Bookmarks,
+            tint = BlueSecondary,
+            modifier = Modifier.weight(1f)
+        )
+        StatCard(
+            title = title3,
+            value = value3,
+            icon = Icons.Rounded.Insights,
+            tint = BlueDeep,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -154,7 +179,8 @@ private fun HeroCard(
 ) {
     Card(
         shape = RoundedCornerShape(26.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
     ) {
         Column(
             modifier = Modifier
@@ -164,14 +190,15 @@ private fun HeroCard(
                         colors = listOf(BluePrimary, BlueSecondary, BlueDeep)
                     )
                 )
-                .padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(
                     imageVector = Icons.Rounded.CalendarToday,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
                 )
                 Text(
                     text = date.replaceFirstChar { it.uppercase() },
@@ -197,16 +224,29 @@ private fun HeroCard(
 }
 
 @Composable
-private fun StatCard(title: String, value: String, modifier: Modifier = Modifier) {
+private fun StatCard(
+    title: String,
+    value: String,
+    icon: ImageVector,
+    tint: Color,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.8f))
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(3.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = tint,
+                modifier = Modifier.size(16.dp)
+            )
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleLarge,
@@ -242,8 +282,9 @@ private fun BlockTitle(title: String, subtitle: String) {
 private fun LessonCard(subject: String, mark: String, homework: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(18.dp)
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        shape = RoundedCornerShape(22.dp),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
     ) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -268,12 +309,14 @@ private fun LessonCard(subject: String, mark: String, homework: String) {
 private fun RecentMarkCard(subject: String, mark: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Rounded.Bookmark,
@@ -295,12 +338,14 @@ private fun RecentMarkCard(subject: String, mark: String) {
 private fun AttentionCard(subject: String, average: Double) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Rounded.ErrorOutline,
@@ -327,10 +372,15 @@ private fun AttentionCard(subject: String, average: Double) {
 private fun InfoCard(text: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
     ) {
-        Row(modifier = Modifier.padding(14.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            modifier = Modifier.padding(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Icon(
                 imageVector = Icons.Rounded.Bookmarks,
                 contentDescription = null,
@@ -357,7 +407,7 @@ private fun MarkPill(mark: String) {
     }
     Card(
         colors = CardDefaults.cardColors(containerColor = tint.copy(alpha = 0.12f)),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(12.dp)
     ) {
         Text(
             text = mark,

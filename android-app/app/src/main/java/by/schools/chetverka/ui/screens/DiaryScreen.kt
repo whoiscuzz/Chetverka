@@ -1,5 +1,6 @@
 package by.schools.chetverka.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,10 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -42,6 +45,7 @@ import by.schools.chetverka.ui.theme.AccentWarning
 import by.schools.chetverka.ui.theme.BlueDeep
 import by.schools.chetverka.ui.theme.BluePrimary
 import by.schools.chetverka.ui.theme.BlueSky
+import by.schools.chetverka.ui.theme.CardWhite
 
 @Composable
 fun DiaryScreen(
@@ -54,9 +58,10 @@ fun DiaryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator(modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally))
+            CircularProgressIndicator()
         }
         return
     }
@@ -90,7 +95,7 @@ fun DiaryScreen(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(
@@ -101,12 +106,14 @@ fun DiaryScreen(
                                 colors = listOf(BluePrimary, BlueDeep)
                             )
                         )
-                        .padding(horizontal = 12.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
                         onClick = { if (selectedWeek > 0) selectedWeek -= 1 },
-                        enabled = selectedWeek > 0
+                        enabled = selectedWeek > 0,
+                        modifier = Modifier.background(Color.White.copy(alpha = 0.2f), CircleShape)
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.ChevronLeft,
@@ -119,11 +126,12 @@ fun DiaryScreen(
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(top = 10.dp)
+                        modifier = Modifier.padding(top = 2.dp)
                     )
                     IconButton(
                         onClick = { if (selectedWeek < state.weeks.lastIndex) selectedWeek += 1 },
-                        enabled = selectedWeek < state.weeks.lastIndex
+                        enabled = selectedWeek < state.weeks.lastIndex,
+                        modifier = Modifier.background(Color.White.copy(alpha = 0.2f), CircleShape)
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.ChevronRight,
@@ -138,8 +146,9 @@ fun DiaryScreen(
         items(week.days) { day ->
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = CardWhite),
+                border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
             ) {
                 Column {
                     Row(
@@ -147,7 +156,8 @@ fun DiaryScreen(
                             .fillMaxWidth()
                             .background(BlueSky.copy(alpha = 0.65f))
                             .padding(horizontal = 12.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.MenuBook,
@@ -165,7 +175,7 @@ fun DiaryScreen(
                         modifier = Modifier.padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        day.lessons.forEach { lesson ->
+                        day.lessons.forEachIndexed { index, lesson ->
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -187,6 +197,12 @@ fun DiaryScreen(
                                 }
                                 MarkBadge(mark = lesson.mark)
                             }
+                            if (index != day.lessons.lastIndex) {
+                                HorizontalDivider(
+                                    color = BlueSky.copy(alpha = 0.7f),
+                                    thickness = 1.dp
+                                )
+                            }
                         }
                     }
                 }
@@ -207,7 +223,8 @@ private fun MarkBadge(mark: String?) {
     }
     Card(
         shape = CircleShape,
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.16f))
+        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.16f)),
+        border = BorderStroke(1.dp, color.copy(alpha = 0.22f))
     ) {
         Text(
             text = mark ?: "—",

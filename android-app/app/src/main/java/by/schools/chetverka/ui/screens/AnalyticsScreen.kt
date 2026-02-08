@@ -1,5 +1,6 @@
 package by.schools.chetverka.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,8 @@ import by.schools.chetverka.ui.theme.AccentDanger
 import by.schools.chetverka.ui.theme.AccentSuccess
 import by.schools.chetverka.ui.theme.AccentWarning
 import by.schools.chetverka.ui.theme.BluePrimary
+import by.schools.chetverka.ui.theme.BlueSky
+import by.schools.chetverka.ui.theme.CardWhite
 
 @Composable
 fun AnalyticsScreen(
@@ -53,8 +56,10 @@ fun AnalyticsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = padding.calculateTopPadding() + 12.dp),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            shape = RoundedCornerShape(30.dp),
+            colors = CardDefaults.cardColors(containerColor = CardWhite),
+            border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.7f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
@@ -105,8 +110,9 @@ fun AnalyticsScreen(
 private fun SubjectProgressCard(subject: String, average: Double, marksCount: Int) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.7f))
     ) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -131,7 +137,7 @@ private fun SubjectProgressCard(subject: String, average: Double, marksCount: In
                 progress = (average / 10f).toFloat().coerceIn(0f, 1f),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(8.dp),
+                    .height(7.dp),
                 color = gradeColor(average),
                 trackColor = gradeColor(average).copy(alpha = 0.14f)
             )
