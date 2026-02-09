@@ -38,8 +38,8 @@
 26        android:supportsRtl="true"
 26-->/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:9:9-35
 27        android:testOnly="true"
-28        android:theme="@android:style/Theme.DeviceDefault.DayNight" >
-28-->/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:10:9-68
+28        android:theme="@style/Theme.Chetverka" >
+28-->/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:10:9-47
 29        <activity
 29-->/Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:12:9-19:20
 30            android:name="by.schools.chetverka.MainActivity"

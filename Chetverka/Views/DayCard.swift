@@ -4,9 +4,8 @@ struct DayCard: View {
     let day: Day
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) { // spacing: 0 для плотного прилегания
+        VStack(alignment: .leading, spacing: 0) {
 
-            // Заголовок дня
             Text(day.name)
                 .font(.headline)
                 .padding(.horizontal)
@@ -14,7 +13,6 @@ struct DayCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.blue.opacity(0.1)) // Цветной фон для хедера
 
-            // Список уроков
             VStack(spacing: 12) {
                 ForEach(day.lessons) { lesson in
                     LessonRow(lesson: lesson)

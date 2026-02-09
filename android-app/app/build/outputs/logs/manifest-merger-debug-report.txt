@@ -100,7 +100,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/whoi
 	android:allowBackup
 		ADDED from /Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:7:9-35
 	android:theme
-		ADDED from /Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:10:9-68
+		ADDED from /Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:10:9-47
 	android:networkSecurityConfig
 		ADDED from /Users/whoiscuzz/PycharmProjects/Chetverka/android-app/app/src/main/AndroidManifest.xml:11:9-69
 activity#by.schools.chetverka.MainActivity

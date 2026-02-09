@@ -24,7 +24,7 @@ struct Week: Identifiable, Codable, Equatable {
         return formatter.date(from: monday)
     }
 
-    /// КРАСИВОЕ НАЗВАНИЕ НЕДЕЛИ
+    /// Красивое название недели (например, "1 – 7 сентября")
     var title: String {
         guard let start = startDate else {
             return "Неизвестная неделя"
@@ -74,6 +74,7 @@ struct Lesson: Identifiable, Codable, Equatable {
         case subject, mark, hw
     }
 
+    /// Преобразование строковой оценки (в т.ч. дробной "8/9") в число для Badge
     var markInt: Int? {
         guard let mark = mark?.trimmingCharacters(in: .whitespacesAndNewlines), !mark.isEmpty else {
             return nil
@@ -84,25 +85,78 @@ struct Lesson: Identifiable, Codable, Equatable {
             guard components.count == 2,
                   let first = Double(components[0]),
                   let second = Double(components[1]) else {
-                return nil // Некорректный формат дроби
+                return nil
             }
-            
             let average = (first + second) / 2.0
-            return Int(average.rounded()) // Округляем до ближайшего целого
-            
+            return Int(average.rounded())
         } else {
-            // Для обычных оценок или букв (Н)
             return Int(mark)
         }
     }
 
-    /// Гарантированное название предмета
+    /// Очищенное название предмета для логики сравнения
     var safeSubject: String {
         subject
             .lowercased()
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
+}
 
+// MARK: - Lesson Extensions (Fix for 'no member icon')
+
+extension Lesson {
+    /// Возвращает название иконки SF Symbols для конкретного предмета
+    static func icon(for subject: String) -> String {
+        let s = subject.lowercased()
+        
+        switch s {
+        // Точные науки
+        case _ where s.contains("матем") || s.contains("алгебр") || s.contains("геом"):
+            return "function"
+        case _ where s.contains("физик"):
+            return "atom"
+        case _ where s.contains("хими"):
+            return "flask.fill"
+        case _ where s.contains("биоло") || s.contains("природ"):
+            return "leaf.fill"
+        case _ where s.contains("информ"):
+            return "laptopcomputer"
+            
+        // Языки и литература
+        case _ where s.contains("русск") || s.contains("белор") || s.contains("яз"):
+            return "character.book.closed.fill"
+        case _ where s.contains("англ") || s.contains("иностр") || s.contains("нем"):
+            return "abc"
+        case _ where s.contains("литер"):
+            return "book.fill"
+            
+        // Гуманитарные науки
+        case _ where s.contains("истор"):
+            return "scroll.fill"
+        case _ where s.contains("геогр"):
+            return "globe.europe.africa.fill"
+        case _ where s.contains("общество"):
+            return "person.2.fill"
+            
+        // Творчество и спорт
+        case _ where s.contains("физк") || s.contains("час здор"):
+            return "figure.run"
+        case _ where s.contains("музык"):
+            return "music.note"
+        case _ where s.contains("изо") || s.contains("искус") || s.contains("хтп"):
+            return "paintpalette.fill"
+        case _ where s.contains("труд") || s.contains("технол"):
+            return "hammer.fill"
+        case _ where s.contains("черчен"):
+            return "pencil.and.ruler.fill"
+            
+        // Остальное
+        case _ where s.contains("поведен"):
+            return "person.badge.shield.checkered.fill"
+        default:
+            return "book.closed"
+        }
+    }
 }
 
 // MARK: - Error
@@ -110,6 +164,4 @@ struct Lesson: Identifiable, Codable, Equatable {
 struct ApiError: Decodable {
     let detail: String
 }
-
-
 
