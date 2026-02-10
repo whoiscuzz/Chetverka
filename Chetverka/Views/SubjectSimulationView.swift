@@ -78,12 +78,12 @@ struct SubjectSimulationView: View {
                 Text("Добавить оценку")
                     .font(.headline)
                 Spacer()
-                Text("Тапни, чтобы добавить")
+                Text("Выбери значение")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
 
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 5)
+            let columns = [GridItem(.adaptive(minimum: 56, maximum: 74), spacing: 10)]
             let orderedMarks = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
             LazyVGrid(columns: columns, spacing: 10) {
@@ -194,17 +194,11 @@ private struct MarkAddButtonLabel: View {
     let mark: Int
 
     var body: some View {
-        VStack(spacing: 2) {
-            Text("\(mark)")
-                .font(.title3)
-                .fontWeight(.heavy)
-            Text("добавить")
-                .font(.caption2)
-                .fontWeight(.medium)
-                .opacity(0.9)
-        }
+        Text("\(mark)")
+            .font(.title3)
+            .fontWeight(.heavy)
         .foregroundColor(.white)
-        .frame(maxWidth: .infinity, minHeight: 54)
+        .frame(maxWidth: .infinity, minHeight: 50)
         .background(
             LinearGradient(
                 colors: gradientColors(for: mark),

@@ -3,6 +3,7 @@ import SwiftUI
 struct DashboardView: View {
 
     @EnvironmentObject var viewModel: DiaryViewModel
+    @EnvironmentObject var newsViewModel: NewsViewModel
 
     // MARK: - Body
     var body: some View {
@@ -10,6 +11,7 @@ struct DashboardView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 25) {
                     greetingSection
+                    newsSection
                     statCardsSection
                     todayLessonsSection
                     recentLessonsSection
@@ -18,6 +20,12 @@ struct DashboardView: View {
                 .padding()
             }
             .navigationTitle("Главная")
+            .refreshable {
+                await newsViewModel.reload()
+            }
+            .task {
+                await newsViewModel.loadIfNeeded()
+            }
         }
     }
 
@@ -30,6 +38,51 @@ struct DashboardView: View {
                 .bold()
             Text(today)
                 .foregroundColor(.secondary)
+        }
+    }
+
+    private var newsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Новости")
+                    .font(.title2)
+                    .bold()
+                Spacer()
+                if newsViewModel.isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                }
+            }
+
+            if newsViewModel.items.isEmpty {
+                if let error = newsViewModel.errorMessage {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Не удалось загрузить новости")
+                            .font(.headline)
+                        Text(error)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Button("Повторить") {
+                            Task { await newsViewModel.reload() }
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.08))
+                    .cornerRadius(16)
+                } else if newsViewModel.isLoading {
+                    PlaceholderCard(text: "Загружаем новости...", icon: "dot.radiowaves.left.and.right")
+                } else {
+                    PlaceholderCard(text: "Пока новостей нет.", icon: "newspaper")
+                }
+            } else {
+                VStack(spacing: 12) {
+                    ForEach(newsViewModel.items.prefix(5)) { item in
+                        NewsCard(item: item)
+                    }
+                }
+            }
         }
     }
     
@@ -102,6 +155,40 @@ struct DashboardView: View {
         formatter.locale = Locale(identifier: "ru_RU")
         formatter.dateFormat = "EEEE, d MMMM"
         return formatter.string(from: Date()).capitalized
+    }
+}
+
+struct NewsCard: View {
+    let item: NewsItem
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(item.title)
+                .font(.headline)
+                .multilineTextAlignment(.leading)
+
+            Text(item.body)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .lineLimit(4)
+                .multilineTextAlignment(.leading)
+
+            HStack {
+                Text(item.formattedDate)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if let author = item.authorName, !author.isEmpty {
+                    Text(author)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.secondary.opacity(0.1))
+        .cornerRadius(16)
     }
 }
 
@@ -204,4 +291,3 @@ struct StatCard: View {
     DashboardView()
         .environmentObject(DiaryViewModel()) // Для превью
 }
-

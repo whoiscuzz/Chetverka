@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject private var diaryViewModel = DiaryViewModel()
+    @StateObject private var newsViewModel = NewsViewModel()
     @State private var showLogin = false
     @State private var sessionid: String?
     @State private var pupilid: String?
@@ -37,6 +38,7 @@ struct MainView: View {
                     }
             }
             .environmentObject(diaryViewModel)
+            .environmentObject(newsViewModel)
         }
         .onAppear(perform: setup)
         .sheet(isPresented: $showLogin) {
@@ -63,6 +65,7 @@ struct MainView: View {
         if self.sessionid != nil && self.pupilid != nil {
             // Загружаем данные, если id уже есть
             reloadData()
+            Task { await newsViewModel.loadIfNeeded() }
         } else {
             // Если чего-то нет, показываем экран входа
             showLogin = true
@@ -83,6 +86,7 @@ struct MainView: View {
         if !diaryViewModel.isLoaded {
              diaryViewModel.load(sessionid: sid, pupilid: pid)
         }
+        Task { await newsViewModel.loadIfNeeded() }
     }
 }
 

@@ -3,6 +3,12 @@ import SwiftUI
 struct ProfileView: View {
     
     @StateObject private var viewModel = ProfileViewModel()
+    @EnvironmentObject private var newsViewModel: NewsViewModel
+    @Environment(\.openURL) private var openURL
+    @State private var feedbackError: String?
+    @State private var showNewsComposer = false
+    
+    private let supportEmail = "chetverka.feedback@gmail.com"
     
     var body: some View {
         NavigationView {
@@ -46,6 +52,44 @@ struct ProfileView: View {
                     }
                     // Можно добавить другие поля из профиля если они появятся
                 }
+
+                if viewModel.profile?.isAdmin == true {
+                    Section("Администрирование") {
+                        Button {
+                            showNewsComposer = true
+                        } label: {
+                            Label("Добавить новость", systemImage: "plus.bubble.fill")
+                        }
+                    }
+                }
+
+                Section("Обратная связь") {
+                    FeedbackActionButton(
+                        icon: "ant.fill",
+                        iconColor: .red,
+                        title: "Сообщить о проблеме",
+                        subtitle: "Опиши, что сломалось и на каком экране"
+                    ) {
+                        sendEmail(
+                            subject: "Chetverka iOS: Проблема",
+                            body: """
+                            Что произошло:
+                            """
+                        )
+                    }
+
+                    FeedbackActionButton(
+                        icon: "lightbulb.fill",
+                        iconColor: .orange,
+                        title: "Предложить идею",
+                        subtitle: "Функции, которых не хватает в приложении"
+                    ) {
+                        sendEmail(
+                            subject: "Chetverka iOS: Идея",
+                            body: "Хочу предложить улучшение:\n\n"
+                        )
+                    }
+                }
                 
                 // --- Секция с выходом ---
                 Section {
@@ -55,7 +99,57 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Профиль")
+            .alert("Не удалось открыть почту", isPresented: Binding(
+                get: { feedbackError != nil },
+                set: { value in
+                    if !value { feedbackError = nil }
+                }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(feedbackError ?? "Попробуй позже.")
+            }
+            .sheet(isPresented: $showNewsComposer) {
+                AdminNewsComposerSheet(
+                    authorName: viewModel.profile?.fullName ?? "Admin",
+                    newsViewModel: newsViewModel
+                )
+            }
         }
+    }
+
+    private func sendEmail(subject: String, body: String) {
+        let metadata = "Версия: \(appVersion()) (\(appBuild()))"
+        let composedBody = "\(body)\n\n\(metadata)"
+        guard let url = mailtoURL(to: supportEmail, subject: subject, body: composedBody) else {
+            feedbackError = "Некорректный адрес поддержки."
+            return
+        }
+
+        openURL(url) { accepted in
+            if !accepted {
+                feedbackError = "На устройстве нет настроенной почты."
+            }
+        }
+    }
+
+    private func appVersion() -> String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+    }
+
+    private func appBuild() -> String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "unknown"
+    }
+
+    private func mailtoURL(to email: String, subject: String, body: String) -> URL? {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = email
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: subject),
+            URLQueryItem(name: "body", value: body)
+        ]
+        return components.url
     }
 }
 
@@ -73,5 +167,115 @@ struct InfoRow: View {
                 .foregroundColor(.primary)
         }
         .padding(.vertical, 4)
+    }
+}
+
+struct FeedbackActionButton: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let subtitle: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.headline)
+                    .foregroundColor(iconColor)
+                    .frame(width: 30, height: 30)
+                    .background(iconColor.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 6)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct AdminNewsComposerSheet: View {
+    let authorName: String
+    @ObservedObject var newsViewModel: NewsViewModel
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var title = ""
+    @State private var contentText = ""
+    @State private var isPublishing = false
+    @State private var errorMessage: String?
+
+    var bodyView: some View {
+        NavigationView {
+            Form {
+                Section("Заголовок") {
+                    TextField("Например: Изменение расписания", text: $title)
+                }
+
+                Section("Текст новости") {
+                    TextEditor(text: $contentText)
+                        .frame(minHeight: 180)
+                }
+
+                if let errorMessage {
+                    Section {
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            .navigationTitle("Новая новость")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Отмена") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(isPublishing ? "Публикация..." : "Опубликовать") {
+                        publish()
+                    }
+                    .disabled(isPublishing || title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || contentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+            }
+        }
+    }
+
+    var body: some View {
+        bodyView
+    }
+
+    private func publish() {
+        let cleanTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanBody = contentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cleanTitle.isEmpty, !cleanBody.isEmpty else { return }
+
+        isPublishing = true
+        errorMessage = nil
+
+        Task { @MainActor in
+            defer { isPublishing = false }
+            do {
+                try await newsViewModel.publish(title: cleanTitle, body: cleanBody, authorName: authorName)
+                dismiss()
+            } catch {
+                errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            }
+        }
     }
 }
