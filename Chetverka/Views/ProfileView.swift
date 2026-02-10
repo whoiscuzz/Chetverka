@@ -49,11 +49,15 @@ struct ProfileView: View {
                 Section("Информация") {
                     if let teacher = viewModel.profile?.classTeacher {
                         InfoRow(label: "Классный руководитель", value: teacher)
+                    } else if viewModel.profile == nil {
+                        Text("Профиль не загружен. Перезайди в аккаунт, чтобы вернуть ФИО и классного руководителя.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                     // Можно добавить другие поля из профиля если они появятся
                 }
 
-                if viewModel.profile?.isAdmin == true {
+                if viewModel.isCurrentUserAdmin {
                     Section("Администрирование") {
                         Button {
                             showNewsComposer = true
@@ -99,6 +103,9 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Профиль")
+            .onAppear {
+                viewModel.loadProfile()
+            }
             .alert("Не удалось открыть почту", isPresented: Binding(
                 get: { feedbackError != nil },
                 set: { value in

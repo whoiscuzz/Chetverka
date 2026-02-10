@@ -6,6 +6,7 @@ extension Notification.Name {
 }
 
 final class ProfileViewModel: ObservableObject {
+    private let adminPupilIDs: Set<String> = ["1106490"]
     
     @Published private(set) var profile: Profile?
 
@@ -19,6 +20,16 @@ final class ProfileViewModel: ObservableObject {
         }
         
         self.profile = try? JSONDecoder().decode(Profile.self, from: profileData)
+    }
+
+    var isCurrentUserAdmin: Bool {
+        if profile?.isAdmin == true {
+            return true
+        }
+        guard let pupilid = KeychainService.shared.load(key: "pupilid") else {
+            return false
+        }
+        return adminPupilIDs.contains(pupilid)
     }
 
     func logout() {
