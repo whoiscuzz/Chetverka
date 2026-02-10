@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import by.schools.chetverka.data.api.LessonDto
-import by.schools.chetverka.data.api.NetworkProvider
 import by.schools.chetverka.data.api.ProfileDto
 import by.schools.chetverka.data.api.WeekDto
 import by.schools.chetverka.data.repo.AuthRepository
 import by.schools.chetverka.data.repo.DiaryRepository
+import by.schools.chetverka.data.schoolsby.SchoolsByWebClient
 import by.schools.chetverka.data.storage.DiaryCache
 import by.schools.chetverka.data.storage.SessionData
 import by.schools.chetverka.data.storage.SessionStorage
@@ -51,7 +51,8 @@ class AppViewModel(
     private val sessionStorage: SessionStorage,
     private val authRepository: AuthRepository,
     private val diaryRepository: DiaryRepository,
-    private val cache: DiaryCache
+    private val cache: DiaryCache,
+    private val schoolsByClient: SchoolsByWebClient
 ) : ViewModel() {
 
     private val greetings = listOf(
@@ -117,6 +118,9 @@ class AppViewModel(
 
     fun logout() {
         val pupilId = currentSession?.pupilId
+        viewModelScope.launch {
+            runCatching { schoolsByClient.clearSession() }
+        }
         sessionStorage.clear()
         cache.clear(pupilId)
         currentSession = null
@@ -239,12 +243,13 @@ class AppViewModel(
                     val appContext = context.applicationContext
                     val sessionStorage = SessionStorage(appContext)
                     val cache = DiaryCache(appContext)
-                    val api = NetworkProvider.api
+                    val client = SchoolsByWebClient(appContext)
                     return AppViewModel(
                         sessionStorage = sessionStorage,
-                        authRepository = AuthRepository(api, sessionStorage),
-                        diaryRepository = DiaryRepository(api, cache),
-                        cache = cache
+                        authRepository = AuthRepository(client, sessionStorage),
+                        diaryRepository = DiaryRepository(client, cache),
+                        cache = cache,
+                        schoolsByClient = client
                     ) as T
                 }
             }

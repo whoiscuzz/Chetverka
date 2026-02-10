@@ -69,9 +69,10 @@ struct Lesson: Identifiable, Codable, Equatable {
     let subject: String
     let mark: String?
     let hw: String?
+    let attachments: [LessonAttachment]?
 
     enum CodingKeys: String, CodingKey {
-        case subject, mark, hw
+        case subject, mark, hw, attachments
     }
 
     /// Преобразование строковой оценки (в т.ч. дробной "8/9") в число для Badge
@@ -99,6 +100,21 @@ struct Lesson: Identifiable, Codable, Equatable {
         subject
             .lowercased()
             .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var hasAttachments: Bool {
+        !(attachments ?? []).isEmpty
+    }
+}
+
+struct LessonAttachment: Identifiable, Codable, Equatable {
+    let id = UUID()
+    let name: String
+    let url: String?
+    let type: String?
+
+    enum CodingKeys: String, CodingKey {
+        case name, url, type
     }
 }
 
@@ -164,4 +180,3 @@ extension Lesson {
 struct ApiError: Decodable {
     let detail: String
 }
-

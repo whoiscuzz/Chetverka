@@ -48,6 +48,19 @@ final class DiaryViewModel: ObservableObject {
     ]
 
     // MARK: - Public Methods
+
+    func reset() {
+        weeks = []
+        recentLessons = []
+        subjectsForAttention = []
+        todayLessons = []
+        lessonsTodayCount = "—"
+        homeworkTodayCount = "—"
+        overallAverageGrade = "—"
+        error = nil
+        isLoading = false
+        isLoaded = false
+    }
     
     func load(sessionid: String, pupilid: String) {
         print("🔥 loadDiary CALLED with sessionid and pupilid")
@@ -200,4 +213,3 @@ final class DiaryViewModel: ObservableObject {
         return 0 // Возвращаем первую неделю, если текущая не найдена
     }
 }
-

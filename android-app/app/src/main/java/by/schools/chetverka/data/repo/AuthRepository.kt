@@ -1,15 +1,12 @@
 package by.schools.chetverka.data.repo
 
-import by.schools.chetverka.data.api.ApiService
-import by.schools.chetverka.data.api.LoginRequest
+import by.schools.chetverka.data.schoolsby.SchoolsByWebClient
 import by.schools.chetverka.data.storage.SessionStorage
 import java.io.IOException
 import kotlinx.coroutines.delay
-import org.json.JSONObject
-import retrofit2.HttpException
 
 class AuthRepository(
-    private val api: ApiService,
+    private val client: SchoolsByWebClient,
     private val sessionStorage: SessionStorage
 ) {
 
@@ -18,7 +15,7 @@ class AuthRepository(
 
         repeat(MAX_LOGIN_ATTEMPTS) { attempt ->
             val result = runCatching {
-                val response = api.login(LoginRequest(username = username, password = password))
+                val response = client.login(username = username, password = password)
                 sessionStorage.saveSession(response.sessionid, response.pupilid)
                 sessionStorage.saveProfile(response.profile)
                 Unit
@@ -41,49 +38,15 @@ class AuthRepository(
     private fun shouldRetry(throwable: Throwable, attempt: Int): Boolean {
         if (attempt >= MAX_LOGIN_ATTEMPTS - 1) return false
         if (throwable is IOException) return true
-        if (throwable is HttpException) {
-            if (throwable.code() == 401) return true
-            if (throwable.code() in 500..599) return true
-        }
         return false
     }
 
     private fun mapError(throwable: Throwable): Throwable {
         if (throwable is IOException) {
-            return IllegalStateException("Нет связи с API. Проверь, что сервер запущен и доступен.")
-        }
-
-        if (throwable is HttpException) {
-            val detail = extractDetail(throwable)
-
-            if (throwable.code() == 401) {
-                return IllegalStateException(
-                    "Вход не выполнен. Проверь логин/пароль. Если всё верно, это может быть временный сбой schools.by — попробуй ещё раз."
-                )
-            }
-
-            if (throwable.code() == 504 || detail.contains("timeout", ignoreCase = true)) {
-                return IllegalStateException(
-                    "Таймаут при запросе к schools.by. Подожди немного и повтори вход."
-                )
-            }
-
-            if (throwable.code() in 500..599) {
-                return IllegalStateException(
-                    detail.ifBlank { "Ошибка сервера при авторизации (${throwable.code()})." }
-                )
-            }
+            return IllegalStateException("Нет связи с интернетом. Проверь соединение и повтори вход.")
         }
 
         return IllegalStateException(throwable.message ?: "Ошибка авторизации.")
-    }
-
-    private fun extractDetail(throwable: HttpException): String {
-        val errorBody = throwable.response()?.errorBody()?.string().orEmpty()
-        if (errorBody.isBlank()) return ""
-        return runCatching {
-            JSONObject(errorBody).optString("detail").orEmpty()
-        }.getOrDefault("")
     }
 
     private companion object {

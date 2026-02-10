@@ -36,6 +36,20 @@ final class SubjectSimulationViewModel: ObservableObject {
         objectWillChange.send()
     }
 
+    func removeAddedMark(at index: Int) {
+        guard simulation.addedMarks.indices.contains(index) else { return }
+        simulation.addedMarks.remove(at: index)
+        updateGoalSummary()
+        objectWillChange.send()
+    }
+
+    func clearAddedMarks() {
+        guard !simulation.addedMarks.isEmpty else { return }
+        simulation.addedMarks.removeAll()
+        updateGoalSummary()
+        objectWillChange.send()
+    }
+
     /// Рассчитывает, сколько оценок нужно для достижения цели
     private func updateGoalSummary() {
         // Используем roundedAverage для проверки

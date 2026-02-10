@@ -31,4 +31,16 @@ final class DiaryCache {
             return nil
         }
     }
+
+    func clear(for pupilid: String) {
+        let url = Self.fileURL(for: pupilid)
+        do {
+            if FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.removeItem(at: url)
+                print("🧹 Diary cache cleared for pupil \(pupilid).")
+            }
+        } catch {
+            print("❌ Failed to clear diary cache:", error.localizedDescription)
+        }
+    }
 }

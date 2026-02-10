@@ -27,57 +27,17 @@ enum DiaryLoadError: Error, LocalizedError {
 }
 
 struct DiaryAPI {
-    
-    private let baseURL = "http://192.168.0.113:8000"
 
     func loadDiary(sessionid: String, pupilid: String, completion: @escaping (Result<DiaryResponse, DiaryLoadError>) -> Void) {
-        
-        guard var urlComponents = URLComponents(string: "\(baseURL)/parse") else {
-            completion(.failure(.invalidURL))
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "sessionid", value: sessionid),
-            URLQueryItem(name: "pupilid", value: pupilid)
-        ]
-        
-        guard let url = urlComponents.url else {
-            completion(.failure(.invalidURL))
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(.networkError(error)))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(.failure(.noData)) // Or a more specific error
-                return
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                if let data = data, let apiError = try? JSONDecoder().decode(ApiError.self, from: data) {
-                    completion(.failure(.apiError(apiError.detail)))
-                } else {
-                    completion(.failure(.httpError(statusCode: httpResponse.statusCode)))
-                }
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(.noData))
-                return
-            }
-
+        // sessionid kept for backward compatibility (cache keys / app flow).
+        // Actual requests are made from the device to schools.by via WKWebView.
+        Task { @MainActor in
             do {
-                let diaryResponse = try JSONDecoder().decode(DiaryResponse.self, from: data)
-                completion(.success(diaryResponse))
+                let response = try await SchoolsByWebClient.shared.fetchDiary(pupilid: pupilid, sessionid: sessionid)
+                completion(.success(response))
             } catch {
-                completion(.failure(.decodingError(error)))
+                completion(.failure(.apiError((error as? LocalizedError)?.errorDescription ?? error.localizedDescription)))
             }
-        }.resume()
+        }
     }
 }

@@ -1,7 +1,7 @@
 package by.schools.chetverka.data.repo
 
-import by.schools.chetverka.data.api.ApiService
 import by.schools.chetverka.data.api.DiaryResponse
+import by.schools.chetverka.data.schoolsby.SchoolsByWebClient
 import by.schools.chetverka.data.storage.DiaryCache
 
 data class DiaryLoadResult(
@@ -10,7 +10,7 @@ data class DiaryLoadResult(
 )
 
 class DiaryRepository(
-    private val api: ApiService,
+    private val client: SchoolsByWebClient,
     private val cache: DiaryCache
 ) {
 
@@ -18,7 +18,7 @@ class DiaryRepository(
         val cached = cache.load(pupilId)
 
         return try {
-            val fresh = api.loadDiary(sessionId = sessionId, pupilId = pupilId)
+            val fresh = client.fetchDiary(sessionId = sessionId, pupilId = pupilId)
             cache.save(fresh, pupilId)
             DiaryLoadResult(diary = fresh)
         } catch (error: Throwable) {

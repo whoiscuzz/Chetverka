@@ -48,6 +48,7 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: .didLogout)) { _ in
             // При получении уведомления о выходе
             self.showLogin = true
+            self.diaryViewModel.reset()
             // Можно также сбросить состояние diaryViewModel, чтобы при следующем входе
             // данные точно перезагрузились
             // self.diaryViewModel = DiaryViewModel() // это вызовет ошибку, так как он @StateObject

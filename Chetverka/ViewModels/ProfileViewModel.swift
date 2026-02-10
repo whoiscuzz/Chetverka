@@ -22,15 +22,17 @@ final class ProfileViewModel: ObservableObject {
     }
 
     func logout() {
+        Task { @MainActor in
+            await SchoolsByWebClient.shared.clearSession()
+        }
+
+        let pupilidBeforeClear = KeychainService.shared.load(key: "pupilid")
         let sessionCleared = KeychainService.shared.delete(key: "sessionid")
         let pupilCleared = KeychainService.shared.delete(key: "pupilid")
 
         UserDefaults.standard.removeObject(forKey: "userProfile")
-
-        if let pupilid = KeychainService.shared.load(key: "pupilid") {
-
-             let cache = DiaryCache()
-
+        if let pupilidBeforeClear {
+            DiaryCache().clear(for: pupilidBeforeClear)
         }
 
         print("Logged out. Keychain cleared: \(sessionCleared && pupilCleared)")
