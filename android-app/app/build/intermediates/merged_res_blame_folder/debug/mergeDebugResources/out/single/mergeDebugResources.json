@@ -1,22 +1,30 @@
 [
     {
-        "merged": "by.schools.chetverka.app-debug-57:/font_montserrat_medium.xml.flat",
-        "source": "by.schools.chetverka.app-main-59:/font/montserrat_medium.xml"
+        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-73:/xml_network_security_config.xml.flat",
+        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-75:/xml/network_security_config.xml"
     },
     {
-        "merged": "by.schools.chetverka.app-debug-57:/font_montserrat_semibold.xml.flat",
-        "source": "by.schools.chetverka.app-main-59:/font/montserrat_semibold.xml"
+        "merged": "by.schools.chetverka.app-debug-73:/font_montserrat_semibold.ttf.flat",
+        "source": "by.schools.chetverka.app-main-75:/font/montserrat_semibold.ttf"
     },
     {
-        "merged": "by.schools.chetverka.app-debug-57:/font_montserrat_regular.xml.flat",
-        "source": "by.schools.chetverka.app-main-59:/font/montserrat_regular.xml"
+        "merged": "by.schools.chetverka.app-debug-73:/font_montserrat_regular.ttf.flat",
+        "source": "by.schools.chetverka.app-main-75:/font/montserrat_regular.ttf"
     },
     {
-        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-57:/xml_network_security_config.xml.flat",
-        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-59:/xml/network_security_config.xml"
+        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-73:/font_montserrat_bold.ttf.flat",
+        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-75:/font/montserrat_bold.ttf"
     },
     {
-        "merged": "by.schools.chetverka.app-debug-57:/font_montserrat_bold.xml.flat",
-        "source": "by.schools.chetverka.app-main-59:/font/montserrat_bold.xml"
+        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-73:/font_montserrat_medium.ttf.flat",
+        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-75:/font/montserrat_medium.ttf"
+    },
+    {
+        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-73:/font_montserrat_regular.xml.flat",
+        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-75:/font/montserrat_regular.xml"
+    },
+    {
+        "merged": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-debug-73:/font_montserrat_semibold.xml.flat",
+        "source": "/Users/whoiscuzz/.gradle/daemon/9.0-milestone-1/by.schools.chetverka.app-main-75:/font/montserrat_semibold.xml"
     }
 ]

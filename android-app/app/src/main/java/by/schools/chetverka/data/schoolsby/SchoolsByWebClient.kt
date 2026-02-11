@@ -161,11 +161,12 @@ class SchoolsByWebClient(appContext: Context) {
 
         var safetyCounter = 0
         while (week != null && !visited.contains(week)) {
-            visited += week
+            val currentWeek = week ?: break
+            visited += currentWeek
             safetyCounter += 1
             if (safetyCounter > 80) break
 
-            val url = "$base/m/pupil/$pupilId/dnevnik/quarter/$quarterId/week/$week"
+            val url = "$base/m/pupil/$pupilId/dnevnik/quarter/$quarterId/week/$currentWeek"
             runner.load(url)
             val payloadJson = runner.evalString(DIARY_WEEK_JS)
             if (payloadJson.isNullOrBlank()) throw SchoolsByWebError.ParsingFailed("week payload")
@@ -181,7 +182,7 @@ class SchoolsByWebClient(appContext: Context) {
 
             val days = payload.days.mapIndexed { index, d ->
                 DayDto(
-                    date = addDays(week, index),
+                    date = addDays(currentWeek, index),
                     name = d.name,
                     lessons = d.lessons.map { lp ->
                         LessonDto(subject = lp.subject, mark = lp.mark, hw = lp.hw)
@@ -189,7 +190,7 @@ class SchoolsByWebClient(appContext: Context) {
                 )
             }
 
-            weeks += WeekDto(monday = week, days = days)
+            weeks += WeekDto(monday = currentWeek, days = days)
             week = payload.nextWeek
         }
 
@@ -433,7 +434,7 @@ private class WebViewRunner(
         try {
             withTimeout(35_000L) {
                 withContext(Dispatchers.Main.immediate) {
-                    suspendCancellableCoroutine { cont ->
+                    suspendCancellableCoroutine<Unit> { cont ->
                         navContinuation = cont
                         trigger(wv)
                     }
