@@ -48,6 +48,12 @@ struct DashboardView: View {
                     .font(.title2)
                     .bold()
                 Spacer()
+                NavigationLink {
+                    NewsFeedView()
+                } label: {
+                    Text("Все")
+                        .font(.subheadline.weight(.semibold))
+                }
                 if newsViewModel.isLoading {
                     ProgressView()
                         .scaleEffect(0.8)
@@ -77,9 +83,17 @@ struct DashboardView: View {
                     PlaceholderCard(text: "Пока новостей нет.", icon: "newspaper")
                 }
             } else {
-                VStack(spacing: 12) {
-                    ForEach(newsViewModel.items.prefix(5)) { item in
-                        NewsCard(item: item)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Последняя новость")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    if let latestItem = newsViewModel.items.first {
+                        NavigationLink {
+                            NewsDetailView(item: latestItem)
+                        } label: {
+                            NewsCard(item: latestItem)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -183,6 +197,9 @@ struct NewsCard: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.7))
             }
         }
         .padding()
