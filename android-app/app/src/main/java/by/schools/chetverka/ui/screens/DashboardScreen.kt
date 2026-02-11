@@ -72,7 +72,7 @@ fun DashboardScreen(
     if (!state.isLoaded && !state.isLoading) {
         EmptyState(
             title = "Нет данных",
-            subtitle = "Зайди в профиль и нажми «Обновить дневник».",
+            subtitle = state.error ?: "Зайди в профиль и нажми «Обновить дневник».",
             padding = padding
         )
         return

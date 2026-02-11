@@ -19,11 +19,26 @@ class DiaryRepository(
 
         return try {
             val fresh = client.fetchDiary(sessionId = sessionId, pupilId = pupilId)
+            if (fresh.weeks.isEmpty()) {
+                if (cached != null) {
+                    return DiaryLoadResult(
+                        diary = cached,
+                        errorMessage = "Сервер вернул пустой дневник. Показан кэш."
+                    )
+                }
+                return DiaryLoadResult(
+                    diary = null,
+                    errorMessage = "Дневник пустой или не распарсился. Попробуй обновить еще раз."
+                )
+            }
             cache.save(fresh, pupilId)
             DiaryLoadResult(diary = fresh)
         } catch (error: Throwable) {
             if (cached != null) {
-                DiaryLoadResult(diary = cached, errorMessage = null)
+                DiaryLoadResult(
+                    diary = cached,
+                    errorMessage = "Ошибка загрузки: ${error.message ?: "unknown"}. Показан кэш."
+                )
             } else {
                 DiaryLoadResult(
                     diary = null,

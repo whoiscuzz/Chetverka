@@ -64,7 +64,8 @@ data class DayDto(
 data class LessonDto(
     val subject: String,
     val mark: String? = null,
-    val hw: String? = null
+    val hw: String? = null,
+    val attachments: List<LessonAttachment>? = null
 ) {
     val safeSubject: String
         get() = subject.lowercase().trim()
@@ -80,6 +81,36 @@ data class LessonDto(
                 val second = parts[1].toDoubleOrNull() ?: return null
                 return ((first + second) / 2.0).roundToInt()
             }
-            return cleaned.toIntOrNull()
+            cleaned.toIntOrNull()?.let { return it }
+            // Cases like "8 (к/р)", "9*", "7,5" etc.
+            val normalized = cleaned.replace(',', '.')
+            normalized.toDoubleOrNull()?.let { return it.roundToInt() }
+            val firstNumber = Regex("""\d+([.,]\d+)?""").find(normalized)?.value ?: return null
+            return firstNumber.replace(',', '.').toDoubleOrNull()?.roundToInt()
         }
 }
+
+@Serializable
+data class LessonAttachment(
+    val name: String,
+    val url: String? = null,
+    val type: String? = null
+)
+
+@Serializable
+data class NewsItem(
+    val id: Int,
+    val title: String,
+    val body: String,
+    val created_at: String,
+    val is_published: Boolean? = null,
+    val author_name: String? = null
+)
+
+@Serializable
+data class CreateNewsPayload(
+    val title: String,
+    val body: String,
+    val is_published: Boolean,
+    val author_name: String
+)

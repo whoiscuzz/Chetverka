@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import by.schools.chetverka.data.api.LessonDto
+import by.schools.chetverka.data.api.NewsItem
 import by.schools.chetverka.data.api.ProfileDto
 import by.schools.chetverka.data.api.WeekDto
+import by.schools.chetverka.data.news.NewsService
 import by.schools.chetverka.data.repo.AuthRepository
 import by.schools.chetverka.data.repo.DiaryRepository
 import by.schools.chetverka.data.schoolsby.SchoolsByWebClient
@@ -47,12 +49,27 @@ data class DiaryUiState(
     val stats: DashboardStats = DashboardStats()
 )
 
+data class NewsUiState(
+    val isLoading: Boolean = false,
+    val loadedOnce: Boolean = false,
+    val error: String? = null,
+    val items: List<NewsItem> = emptyList()
+)
+
+data class SubjectResultUi(
+    val subject: String,
+    val average: Double,
+    val marksCount: Int,
+    val marks: List<Int>
+)
+
 class AppViewModel(
     private val sessionStorage: SessionStorage,
     private val authRepository: AuthRepository,
     private val diaryRepository: DiaryRepository,
     private val cache: DiaryCache,
-    private val schoolsByClient: SchoolsByWebClient
+    private val schoolsByClient: SchoolsByWebClient,
+    private val newsService: NewsService
 ) : ViewModel() {
 
     private val greetings = listOf(
@@ -68,6 +85,9 @@ class AppViewModel(
 
     private val _diaryState = MutableStateFlow(DiaryUiState())
     val diaryState: StateFlow<DiaryUiState> = _diaryState.asStateFlow()
+
+    private val _newsState = MutableStateFlow(NewsUiState())
+    val newsState: StateFlow<NewsUiState> = _newsState.asStateFlow()
 
     private var currentSession: SessionData? = null
 
@@ -99,6 +119,7 @@ class AppViewModel(
 
     fun reloadDiary() {
         val session = currentSession ?: return
+        if (_diaryState.value.isLoading) return
         viewModelScope.launch {
             _diaryState.update { it.copy(isLoading = true, error = null) }
             val result = diaryRepository.loadDiary(session.sessionId, session.pupilId)
@@ -129,6 +150,72 @@ class AppViewModel(
             isAuthenticated = false
         )
         _diaryState.value = DiaryUiState()
+        _newsState.value = NewsUiState()
+    }
+
+    fun loadNewsIfNeeded() {
+        if (_newsState.value.loadedOnce || _newsState.value.isLoading) return
+        reloadNews()
+    }
+
+    fun reloadNews() {
+        if (_newsState.value.isLoading) return
+        viewModelScope.launch {
+            _newsState.update { it.copy(isLoading = true, error = null) }
+            runCatching { newsService.fetchPublished() }
+                .onSuccess { items ->
+                    _newsState.update {
+                        it.copy(
+                            isLoading = false,
+                            loadedOnce = true,
+                            error = null,
+                            items = items
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _newsState.update {
+                        it.copy(
+                            isLoading = false,
+                            loadedOnce = false,
+                            error = error.message ?: "Не удалось загрузить новости."
+                        )
+                    }
+                }
+        }
+    }
+
+    fun publishNews(title: String, body: String) {
+        val author = appState.value.profile?.fullName ?: "Admin"
+        viewModelScope.launch {
+            _newsState.update { it.copy(isLoading = true, error = null) }
+            runCatching { newsService.publish(title = title, body = body, authorName = author) }
+                .onSuccess { created ->
+                    _newsState.update {
+                        it.copy(
+                            isLoading = false,
+                            loadedOnce = true,
+                            error = null,
+                            items = listOf(created) + it.items
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _newsState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = error.message ?: "Не удалось опубликовать новость."
+                        )
+                    }
+                }
+        }
+    }
+
+    fun isCurrentUserAdmin(): Boolean {
+        val profile = appState.value.profile
+        val byName = profile?.fullName?.contains("admin", ignoreCase = true) == true
+        val byPupil = currentSession?.pupilId == "1106490"
+        return byName || byPupil
     }
 
     private fun bootstrap() {
@@ -152,6 +239,7 @@ class AppViewModel(
                 profile = sessionStorage.loadProfile()
             )
             reloadDiary()
+            loadNewsIfNeeded()
         }
     }
 
@@ -205,7 +293,7 @@ class AppViewModel(
         return marks.average()
     }
 
-    fun results(): List<Triple<String, Double, Int>> {
+    fun results(): List<SubjectResultUi> {
         return diaryState.value.weeks
             .flatMap { it.days }
             .flatMap { it.lessons }
@@ -215,9 +303,14 @@ class AppViewModel(
             }
             .groupBy({ it.first }, { it.second })
             .map { (subject, marks) ->
-                Triple(subject.replaceFirstChar { it.uppercase() }, marks.average(), marks.size)
+                SubjectResultUi(
+                    subject = subject.replaceFirstChar { it.uppercase() },
+                    average = marks.average(),
+                    marksCount = marks.size,
+                    marks = marks
+                )
             }
-            .sortedByDescending { it.second }
+            .sortedByDescending { it.average }
     }
 
     fun currentWeekIndex(): Int {
@@ -249,7 +342,8 @@ class AppViewModel(
                         authRepository = AuthRepository(client, sessionStorage),
                         diaryRepository = DiaryRepository(client, cache),
                         cache = cache,
-                        schoolsByClient = client
+                        schoolsByClient = client,
+                        newsService = NewsService()
                     ) as T
                 }
             }

@@ -2,6 +2,7 @@ package by.schools.chetverka.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.DiaryUiState
@@ -53,6 +55,7 @@ fun DiaryScreen(
     state: DiaryUiState,
     initialWeekIndex: Int
 ) {
+    val uriHandler = LocalUriHandler.current
     if (state.weeks.isEmpty() && state.isLoading) {
         Column(
             modifier = Modifier
@@ -143,7 +146,10 @@ fun DiaryScreen(
             }
         }
 
-        items(week.days) { day ->
+        items(
+            items = week.days,
+            key = { day -> "${week.monday}:${day.date}:${day.name}" }
+        ) { day ->
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
@@ -193,6 +199,38 @@ fun DiaryScreen(
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             modifier = Modifier.padding(top = 3.dp)
                                         )
+                                    }
+                                    val attachments = lesson.attachments.orEmpty()
+                                    if (attachments.isNotEmpty()) {
+                                        Column(
+                                            modifier = Modifier.padding(top = 6.dp),
+                                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            attachments.take(3).forEach { attachment ->
+                                                val title = attachment.name.ifBlank { "Файл" }
+                                                val url = attachment.url
+                                                Text(
+                                                    text = "📎 $title",
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = BluePrimary,
+                                                    modifier = Modifier.clickable(
+                                                        enabled = !url.isNullOrBlank()
+                                                    ) {
+                                                        if (!url.isNullOrBlank()) {
+                                                            val link = if (url.startsWith("http")) url else "https://4minsk.schools.by$url"
+                                                            uriHandler.openUri(link)
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                            if (attachments.size > 3) {
+                                                Text(
+                                                    text = "+ еще ${attachments.size - 3}",
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                                 MarkBadge(mark = lesson.mark)

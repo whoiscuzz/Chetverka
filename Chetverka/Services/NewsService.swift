@@ -32,7 +32,7 @@ struct NewsService {
     private let session: URLSession = .shared
     private let fallbackBaseURL = "https://cfxymbnlgfbpgxsysrah.supabase.co"
     private let fallbackApiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo"
-    private let fallbackAdminEmail = "qwen123dmf@pm.me"
+    private let fallbackAdminEmail = "chetverka@proton.me"
     private let fallbackAdminPassword = "g9U2Q7$kUhCDp7xmCbcRVw#px!r"
 
     private var baseURL: String? {

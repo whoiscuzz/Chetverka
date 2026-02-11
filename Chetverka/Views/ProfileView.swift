@@ -8,7 +8,7 @@ struct ProfileView: View {
     @State private var feedbackError: String?
     @State private var showNewsComposer = false
     
-    private let supportEmail = "chetverka.feedback@gmail.com"
+    private let supportEmail = "chetverka@proton.me"
     
     var body: some View {
         NavigationView {
