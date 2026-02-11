@@ -50,10 +50,12 @@ import by.schools.chetverka.ui.screens.DashboardScreen
 import by.schools.chetverka.ui.screens.DiaryScreen
 import by.schools.chetverka.ui.screens.ProfileScreen
 import by.schools.chetverka.ui.screens.ResultsScreen
+import by.schools.chetverka.ui.theme.BlueDeep
 import by.schools.chetverka.ui.theme.BluePrimary
 import by.schools.chetverka.ui.theme.BlueSoft
 import by.schools.chetverka.ui.theme.BlueSky
 import by.schools.chetverka.ui.theme.CardWhite
+import by.schools.chetverka.ui.theme.TextMuted
 
 private enum class Tab(
     val title: String,
@@ -104,30 +106,30 @@ private fun MainTabs(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
+                    .padding(horizontal = 14.dp, vertical = 12.dp)
             ) {
                 Surface(
-                    color = CardWhite.copy(alpha = 0.96f),
-                    tonalElevation = 10.dp,
-                    shadowElevation = 20.dp,
-                    shape = RoundedCornerShape(34.dp),
+                    color = CardWhite.copy(alpha = 0.97f),
+                    tonalElevation = 8.dp,
+                    shadowElevation = 16.dp,
+                    shape = RoundedCornerShape(30.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     NavigationBar(
                         containerColor = Color.Transparent,
                         tonalElevation = 0.dp,
-                        modifier = Modifier.height(70.dp)
+                        modifier = Modifier.height(68.dp)
                     ) {
                         Tab.entries.forEach { tab ->
                             NavigationBarItem(
                                 selected = selectedTab == tab,
                                 onClick = { selectedTab = tab },
                                 colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = BluePrimary,
+                                    selectedIconColor = BlueDeep,
                                     selectedTextColor = BluePrimary,
-                                    indicatorColor = BlueSky.copy(alpha = 0.72f),
-                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    indicatorColor = BluePrimary.copy(alpha = 0.2f),
+                                    unselectedIconColor = TextMuted,
+                                    unselectedTextColor = TextMuted
                                 ),
                                 icon = {
                                     Icon(
@@ -180,10 +182,9 @@ private fun AppBackground(content: @Composable () -> Unit) {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color.White,
                         BlueSoft,
-                        BlueSky.copy(alpha = 0.52f),
-                        Color.White
+                        BlueSoft.copy(alpha = 0.96f),
+                        Color(0xFFEBD8B8)
                     )
                 )
             )
@@ -193,9 +194,20 @@ private fun AppBackground(content: @Composable () -> Unit) {
                 .fillMaxSize()
                 .background(
                     Brush.radialGradient(
-                        colors = listOf(BlueSky.copy(alpha = 0.55f), Color.Transparent),
-                        center = Offset(180f, 80f),
-                        radius = 1200f
+                        colors = listOf(BlueSky.copy(alpha = 0.42f), Color.Transparent),
+                        center = Offset(120f, 140f),
+                        radius = 900f
+                    )
+                )
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(Color(0x33FFFFFF), Color.Transparent),
+                        center = Offset(900f, 260f),
+                        radius = 700f
                     )
                 )
         )
