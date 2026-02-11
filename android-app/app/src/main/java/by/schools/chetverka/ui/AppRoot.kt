@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.EmojiEvents
+import androidx.compose.material.icons.rounded.Feed
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material.icons.rounded.Person
@@ -48,6 +49,7 @@ import by.schools.chetverka.ui.login.LoginScreen
 import by.schools.chetverka.ui.screens.AnalyticsScreen
 import by.schools.chetverka.ui.screens.DashboardScreen
 import by.schools.chetverka.ui.screens.DiaryScreen
+import by.schools.chetverka.ui.screens.NewsScreen
 import by.schools.chetverka.ui.screens.ProfileScreen
 import by.schools.chetverka.ui.screens.ResultsScreen
 import by.schools.chetverka.ui.theme.BlueDeep
@@ -62,6 +64,7 @@ private enum class Tab(
     val icon: ImageVector
 ) {
     Dashboard("Главная", Icons.Rounded.Home),
+    News("Новости", Icons.Rounded.Feed),
     Diary("Дневник", Icons.Rounded.CalendarMonth),
     Analytics("Аналитика", Icons.Rounded.Insights),
     Results("Итоги", Icons.Rounded.EmojiEvents),
@@ -72,6 +75,7 @@ private enum class Tab(
 fun AppRoot(viewModel: AppViewModel) {
     val appState by viewModel.appState.collectAsStateWithLifecycle()
     val diaryState by viewModel.diaryState.collectAsStateWithLifecycle()
+    val newsState by viewModel.newsState.collectAsStateWithLifecycle()
 
     AppBackground {
         when {
@@ -84,6 +88,7 @@ fun AppRoot(viewModel: AppViewModel) {
             else -> MainTabs(
                 viewModel = viewModel,
                 diaryState = diaryState,
+                newsState = newsState,
                 profile = appState.profile,
                 onLogout = viewModel::logout
             )
@@ -95,6 +100,7 @@ fun AppRoot(viewModel: AppViewModel) {
 private fun MainTabs(
     viewModel: AppViewModel,
     diaryState: DiaryUiState,
+    newsState: NewsUiState,
     profile: ProfileDto?,
     onLogout: () -> Unit
 ) {
@@ -118,27 +124,27 @@ private fun MainTabs(
                     NavigationBar(
                         containerColor = Color.Transparent,
                         tonalElevation = 0.dp,
-                        modifier = Modifier.height(68.dp)
+                        modifier = Modifier.height(64.dp)
                     ) {
                         Tab.entries.forEach { tab ->
                             NavigationBarItem(
+                                modifier = Modifier.weight(1f),
                                 selected = selectedTab == tab,
                                 onClick = { selectedTab = tab },
                                 colors = NavigationBarItemDefaults.colors(
                                     selectedIconColor = BlueDeep,
-                                    selectedTextColor = BluePrimary,
                                     indicatorColor = BluePrimary.copy(alpha = 0.2f),
-                                    unselectedIconColor = TextMuted,
-                                    unselectedTextColor = TextMuted
+                                    unselectedIconColor = TextMuted
                                 ),
                                 icon = {
                                     Icon(
                                         imageVector = tab.icon,
                                         contentDescription = tab.title,
-                                        modifier = Modifier.size(22.dp)
+                                        modifier = Modifier.size(23.dp)
                                     )
                                 },
-                                label = { Text(tab.title) }
+                                label = null,
+                                alwaysShowLabel = false
                             )
                         }
                     }
@@ -148,6 +154,11 @@ private fun MainTabs(
     ) { padding ->
         when (selectedTab) {
             Tab.Dashboard -> DashboardScreen(padding = padding, state = diaryState)
+            Tab.News -> NewsScreen(
+                padding = padding,
+                state = newsState,
+                onReload = viewModel::reloadNews
+            )
             Tab.Diary -> DiaryScreen(
                 padding = padding,
                 state = diaryState,
@@ -167,7 +178,10 @@ private fun MainTabs(
             Tab.Profile -> ProfileScreen(
                 padding = padding,
                 profile = profile,
+                isAdmin = viewModel.isCurrentUserAdmin(),
+                newsError = newsState.error,
                 onReload = viewModel::reloadDiary,
+                onPublishNews = viewModel::publishNews,
                 onLogout = onLogout
             )
         }
