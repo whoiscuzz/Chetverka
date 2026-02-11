@@ -3,6 +3,7 @@ package by.schools.chetverka.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,13 +13,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.Bookmarks
-import androidx.compose.material.icons.rounded.CalendarToday
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material.icons.rounded.Insights
+import androidx.compose.material.icons.rounded.NotificationsNone
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,10 +31,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.DiaryUiState
 import by.schools.chetverka.ui.EmptyState
@@ -74,6 +78,13 @@ fun DashboardScreen(
         return
     }
 
+    val date = LocalDate.now()
+    val monthTitle = date.format(DateTimeFormatter.ofPattern("LLL, yyyy", Locale("ru")))
+        .replaceFirstChar { it.uppercase() }
+    val dayTitle = date.format(DateTimeFormatter.ofPattern("d MMMM", Locale("ru")))
+        .replaceFirstChar { it.uppercase() }
+    val nextLesson = state.stats.todayLessonsList.firstOrNull()
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -81,194 +92,231 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp),
         contentPadding = PaddingValues(
             start = 0.dp,
-            top = padding.calculateTopPadding() + 14.dp,
+            top = padding.calculateTopPadding() + 12.dp,
             end = 0.dp,
             bottom = padding.calculateBottomPadding() + 24.dp
         )
     ) {
         item {
-            HeroCard(
+            GreetingCard(
                 greeting = state.stats.randomGreeting,
-                date = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale("ru"))),
-                error = state.error
-            )
-        }
-        item {
-            StatRow(
-                title1 = "Уроков",
-                value1 = state.stats.lessonsToday,
-                title2 = "ДЗ",
-                value2 = state.stats.homeworkToday,
-                title3 = "Средний",
-                value3 = state.stats.overallAverage
+                month = monthTitle,
+                day = dayTitle,
+                lessonCount = state.stats.lessonsToday
             )
         }
 
-        item { BlockTitle("Уроки на сегодня", "Расписание и домашка") }
+        item {
+            NextTaskCard(
+                subject = nextLesson?.subject ?: "Сегодня можно выдохнуть",
+                subtitle = nextLesson?.hw.orEmpty().ifBlank { "Задач на сегодня нет" },
+                mark = nextLesson?.mark ?: "--"
+            )
+        }
+
+        item {
+            SectionTitle(title = "Сегодня", subtitle = "Расписание и оценки")
+        }
+
         if (state.stats.todayLessonsList.isEmpty()) {
-            item { InfoCard("Сегодня уроков нет 🎉") }
+            item { InfoCard(text = "Сегодня уроков нет") }
         } else {
             items(state.stats.todayLessonsList) { lesson ->
-                LessonCard(
+                LessonTaskCard(
                     subject = lesson.subject,
-                    mark = lesson.mark ?: "—",
-                    homework = lesson.hw.orEmpty().ifBlank { "Без ДЗ" }
+                    homework = lesson.hw.orEmpty().ifBlank { "Без домашнего задания" },
+                    mark = lesson.mark ?: "--"
                 )
             }
         }
 
-        item { BlockTitle("Последние оценки", "Твой свежий прогресс") }
-        if (state.stats.recentLessons.isEmpty()) {
-            item { InfoCard("Оценок пока нет") }
-        } else {
-            items(state.stats.recentLessons) { item ->
-                RecentMarkCard(subject = item.first, mark = item.second)
-            }
+        item {
+            SectionTitle(title = "Требуют внимания", subtitle = "Предметы с низким средним")
         }
 
-        item { BlockTitle("Требуют внимания", "Прокачаем эти предметы") }
         if (state.stats.subjectsForAttention.isEmpty()) {
-            item { InfoCard("Проблемных предметов нет 👍") }
+            item { InfoCard(text = "Проблемных предметов нет") }
         } else {
             items(state.stats.subjectsForAttention) { item ->
                 AttentionCard(subject = item.first, average = item.second)
             }
         }
+
+        item {
+            SectionTitle(title = "Последние оценки", subtitle = "Свежий прогресс")
+        }
+
+        if (state.stats.recentLessons.isEmpty()) {
+            item { InfoCard(text = "Оценок пока нет") }
+        } else {
+            items(state.stats.recentLessons) { item ->
+                RecentMarkCard(subject = item.first, mark = item.second)
+            }
+        }
     }
 }
 
 @Composable
-private fun StatRow(
-    title1: String,
-    value1: String,
-    title2: String,
-    value2: String,
-    title3: String,
-    value3: String
-) {
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-        StatCard(
-            title = title1,
-            value = value1,
-            icon = Icons.Rounded.CalendarToday,
-            tint = BluePrimary,
-            modifier = Modifier.weight(1f)
-        )
-        StatCard(
-            title = title2,
-            value = value2,
-            icon = Icons.Rounded.Bookmarks,
-            tint = BlueSecondary,
-            modifier = Modifier.weight(1f)
-        )
-        StatCard(
-            title = title3,
-            value = value3,
-            icon = Icons.Rounded.Insights,
-            tint = BlueDeep,
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-@Composable
-private fun HeroCard(
+private fun GreetingCard(
     greeting: String,
-    date: String,
-    error: String?
+    month: String,
+    day: String,
+    lessonCount: String
 ) {
     Card(
-        shape = RoundedCornerShape(26.dp),
+        shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.7f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(BlueSky),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "M",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = BlueDeep
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = "Hello, Max",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "У тебя $lessonCount уроков",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Icon(
+                    imageVector = Icons.Rounded.NotificationsNone,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            Text(
+                text = greeting,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = BlueDeep
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = month,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = day,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.CalendarMonth,
+                        contentDescription = null,
+                        tint = BluePrimary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = "План",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = BluePrimary
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NextTaskCard(subject: String, subtitle: String, mark: String) {
+    Card(
+        shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(BluePrimary, BlueSecondary, BlueDeep)
+                        listOf(
+                            BluePrimary,
+                            BlueSecondary
+                        )
                     )
                 )
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Icon(
-                    imageVector = Icons.Rounded.CalendarToday,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(18.dp)
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = date.replaceFirstChar { it.uppercase() },
-                    color = Color.White.copy(alpha = 0.95f),
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Next Task",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.White.copy(alpha = 0.95f)
                 )
+                MarkPill(mark = mark, inverse = true)
             }
             Text(
-                text = greeting,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            if (!error.isNullOrBlank()) {
-                Text(
-                    text = "⚠ $error",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun StatCard(
-    title: String,
-    value: String,
-    icon: ImageVector,
-    tint: Color,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = CardWhite),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.8f))
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = tint,
-                modifier = Modifier.size(16.dp)
-            )
-            Text(
-                text = value,
+                text = subject,
                 style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
                 fontWeight = FontWeight.Bold,
-                color = BlueDeep
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = title,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.9f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
 }
 
 @Composable
-private fun BlockTitle(title: String, subtitle: String) {
-    Column(modifier = Modifier.padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+private fun SectionTitle(title: String, subtitle: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = BlueDeep
         )
         Text(
             text = subtitle,
@@ -279,27 +327,45 @@ private fun BlockTitle(title: String, subtitle: String) {
 }
 
 @Composable
-private fun LessonCard(subject: String, mark: String, homework: String) {
+private fun LessonTaskCard(subject: String, homework: String, mark: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = CardWhite),
-        shape = RoundedCornerShape(22.dp),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
     ) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Alarm,
+                    contentDescription = null,
+                    tint = AccentWarning,
+                    modifier = Modifier.size(18.dp)
+                )
                 Text(
                     text = subject,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 MarkPill(mark = mark)
             }
             Text(
                 text = homework,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -309,9 +375,9 @@ private fun LessonCard(subject: String, mark: String, homework: String) {
 private fun RecentMarkCard(subject: String, mark: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = CardWhite),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -319,15 +385,17 @@ private fun RecentMarkCard(subject: String, mark: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Rounded.Bookmark,
+                imageVector = Icons.Rounded.CheckCircle,
                 contentDescription = null,
-                tint = BluePrimary,
+                tint = AccentSuccess,
                 modifier = Modifier.size(20.dp)
             )
             Text(
                 text = subject,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             MarkPill(mark = mark)
         }
@@ -338,9 +406,9 @@ private fun RecentMarkCard(subject: String, mark: String) {
 private fun AttentionCard(subject: String, average: Double) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = CardWhite),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -356,7 +424,9 @@ private fun AttentionCard(subject: String, average: Double) {
             Text(
                 text = subject,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = "%.2f".format(average),
@@ -372,9 +442,9 @@ private fun AttentionCard(subject: String, average: Double) {
 private fun InfoCard(text: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = CardWhite),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.72f))
+        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.75f))
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -384,7 +454,7 @@ private fun InfoCard(text: String) {
             Icon(
                 imageVector = Icons.Rounded.Bookmarks,
                 contentDescription = null,
-                tint = AccentSuccess,
+                tint = BluePrimary,
                 modifier = Modifier.size(20.dp)
             )
             Text(
@@ -396,7 +466,7 @@ private fun InfoCard(text: String) {
 }
 
 @Composable
-private fun MarkPill(mark: String) {
+private fun MarkPill(mark: String, inverse: Boolean = false) {
     val markInt = mark.toIntOrNull()
     val tint = when {
         markInt == null -> BlueSecondary
@@ -405,16 +475,20 @@ private fun MarkPill(mark: String) {
         markInt >= 5 -> AccentWarning
         else -> AccentDanger
     }
+
+    val bgColor = if (inverse) Color.White.copy(alpha = 0.2f) else tint.copy(alpha = 0.14f)
+    val textColor = if (inverse) Color.White else tint
+
     Card(
-        colors = CardDefaults.cardColors(containerColor = tint.copy(alpha = 0.12f)),
-        shape = RoundedCornerShape(12.dp)
+        colors = CardDefaults.cardColors(containerColor = bgColor),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Text(
             text = mark,
-            color = tint,
+            color = textColor,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
         )
     }
 }
