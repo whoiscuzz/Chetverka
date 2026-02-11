@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.EmptyState
+import by.schools.chetverka.ui.SubjectResultUi
 import by.schools.chetverka.ui.theme.AccentDanger
 import by.schools.chetverka.ui.theme.AccentSuccess
 import by.schools.chetverka.ui.theme.AccentWarning
@@ -34,7 +35,7 @@ import by.schools.chetverka.ui.theme.CardWhite
 fun AnalyticsScreen(
     padding: PaddingValues,
     average: Double,
-    results: List<Triple<String, Double, Int>>,
+    results: List<SubjectResultUi>,
     loaded: Boolean
 ) {
     if (!loaded) {
@@ -100,8 +101,12 @@ fun AnalyticsScreen(
             modifier = Modifier.padding(top = 6.dp)
         )
 
-        results.take(8).forEach { (subject, avg, count) ->
-            SubjectProgressCard(subject = subject, average = avg, marksCount = count)
+        results.take(8).forEach { item ->
+            SubjectProgressCard(
+                subject = item.subject,
+                average = item.average,
+                marksCount = item.marksCount
+            )
         }
     }
 }
