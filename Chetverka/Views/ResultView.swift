@@ -65,7 +65,7 @@ struct ResultsView: View {
                     NavigationLink {
                         SubjectSimulationView(
                             subject: result.subject,
-                            marks: marks(for: result.subject)
+                            markEntries: markEntries(for: result.subject)
                         )
                     } label: {
                         SubjectResultCard(
@@ -119,7 +119,7 @@ struct ResultsView: View {
                                 subject: row.subject,
                                 columns: table.columns,
                                 grades: row.grades,
-                                currentQuarterMarks: marks(for: row.subject)
+                                currentQuarterMarkEntries: markEntries(for: row.subject)
                             )
                         } label: {
                             QuarterSubjectCard(
@@ -142,13 +142,33 @@ struct ResultsView: View {
         }
     }
 
-    // MARK: - Достаём оценки предмета
-    private func marks(for subject: String) -> [Int] {
-        diaryVM.weeks
+    // MARK: - Достаём оценки предмета c датой
+    private func markEntries(for subject: String) -> [SubjectMarkEntry] {
+        let normalizedSubject = normalizedSubjectName(subject)
+
+        return diaryVM.weeks
             .flatMap { $0.days }
-            .flatMap { $0.lessons }
-            .filter { $0.safeSubject == subject.lowercased() }
-            .compactMap { $0.markInt }
+            .flatMap { day in
+                day.lessons.compactMap { lesson -> SubjectMarkEntry? in
+                    guard normalizedSubjectName(lesson.subject) == normalizedSubject,
+                          let mark = lesson.markInt,
+                          let markText = lesson.mark?.trimmingCharacters(in: .whitespacesAndNewlines),
+                          !markText.isEmpty else {
+                        return nil
+                    }
+
+                    return SubjectMarkEntry(mark: mark, markText: markText, dateISO: day.date)
+                }
+            }
+            .sorted { $0.dateISO < $1.dateISO }
+    }
+
+    private func normalizedSubjectName(_ value: String) -> String {
+        value
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .joined()
     }
 
     // MARK: - Цвет статуса
@@ -179,7 +199,7 @@ private struct SubjectQuarterDetailView: View {
     let subject: String
     let columns: [String]
     let grades: [String?]
-    let currentQuarterMarks: [Int]
+    let currentQuarterMarkEntries: [SubjectMarkEntry]
 
     var body: some View {
         ScrollView {
@@ -215,7 +235,7 @@ private struct SubjectQuarterDetailView: View {
                         .bold()
 
                     NavigationLink {
-                        SubjectSimulationView(subject: subject, marks: currentQuarterMarks)
+                        SubjectSimulationView(subject: subject, markEntries: currentQuarterMarkEntries)
                     } label: {
                         HStack(spacing: 12) {
                             Image(systemName: "target")

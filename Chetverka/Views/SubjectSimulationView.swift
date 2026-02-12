@@ -1,14 +1,23 @@
 import SwiftUI
 
+struct SubjectMarkEntry: Identifiable, Equatable {
+    let id = UUID()
+    let mark: Int
+    let markText: String
+    let dateISO: String
+}
+
 struct SubjectSimulationView: View {
 
     @StateObject private var viewModel: SubjectSimulationViewModel
+    private let originalMarkEntries: [SubjectMarkEntry]
 
-    init(subject: String, marks: [Int]) {
+    init(subject: String, markEntries: [SubjectMarkEntry]) {
+        self.originalMarkEntries = markEntries
         _viewModel = StateObject(
             wrappedValue: SubjectSimulationViewModel(
                 subject: subject,
-                marks: marks
+                marks: markEntries.compactMap(\.mark)
             )
         )
     }
@@ -17,6 +26,7 @@ struct SubjectSimulationView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 summaryCard
+                marksHistoryCard
                 goalCard
                 addMarksCard
                 addedMarksCard
@@ -25,6 +35,35 @@ struct SubjectSimulationView: View {
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(viewModel.simulation.subject)
+    }
+
+    private var marksHistoryCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Все оценки")
+                .font(.headline)
+
+            if originalMarkEntries.isEmpty {
+                Text("Пока нет оценок по этому предмету.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            } else {
+                LazyVStack(spacing: 8) {
+                    ForEach(originalMarkEntries) { entry in
+                        HStack(spacing: 12) {
+                            Text(formattedDate(entry.dateISO))
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            GradeValueChip(valueText: entry.markText, value: entry.mark)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(18)
     }
 
     private var summaryCard: some View {
@@ -188,6 +227,21 @@ struct SubjectSimulationView: View {
             return .gray
         }
     }
+
+    private func formattedDate(_ isoDate: String) -> String {
+        let source = DateFormatter()
+        source.locale = Locale(identifier: "en_US_POSIX")
+        source.dateFormat = "yyyy-MM-dd"
+
+        guard let date = source.date(from: isoDate) else {
+            return isoDate
+        }
+
+        let target = DateFormatter()
+        target.locale = Locale(identifier: "ru_RU")
+        target.dateFormat = "d MMMM"
+        return target.string(from: date)
+    }
 }
 
 private struct MarkAddButtonLabel: View {
@@ -236,6 +290,37 @@ private struct MarkAddButtonLabel: View {
         case 5...6: return .blue
         case 3...4: return .orange
         default: return .red
+        }
+    }
+}
+
+private struct GradeValueChip: View {
+    let valueText: String
+    let value: Int
+
+    var body: some View {
+        Text(valueText)
+            .font(.subheadline)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(backgroundColor)
+            .cornerRadius(10)
+    }
+
+    private var backgroundColor: Color {
+        switch value {
+        case 9...10:
+            return .green
+        case 7...8:
+            return .orange
+        case 5...6:
+            return .blue
+        case 3...4:
+            return .orange.opacity(0.9)
+        default:
+            return .red
         }
     }
 }
