@@ -1,0 +1,29 @@
+{
+  "" : {
+    "diagnostics" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidget-primary.dia",
+    "emit-module-dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidget-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidget-primary-emit-module.dia",
+    "pch" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidget-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidget-primary.swiftdeps"
+  },
+  "/Users/whoiscuzz/PycharmProjects/Chetverka/ChetverkaWidget/ChetverkaWidgetBundle.swift" : {
+    "const-values" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.swiftconstvalues",
+    "dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.d",
+    "diagnostics" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.dia",
+    "index-unit-output-path" : "/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.o",
+    "llvm-bc" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.bc",
+    "object" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.o",
+    "swift-dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle.swiftdeps",
+    "swiftmodule" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/ChetverkaWidgetBundle~partial.swiftmodule"
+  },
+  "/Users/whoiscuzz/PycharmProjects/Chetverka/ChetverkaWidget/NextLessonLockWidget.swift" : {
+    "const-values" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.swiftconstvalues",
+    "dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.d",
+    "diagnostics" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.dia",
+    "index-unit-output-path" : "/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.o",
+    "llvm-bc" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.bc",
+    "object" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.o",
+    "swift-dependencies" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget.swiftdeps",
+    "swiftmodule" : "/Users/whoiscuzz/PycharmProjects/Chetverka/build/Chetverka.build/Debug-iphoneos/ChetverkaWidget.build/Objects-normal/arm64/NextLessonLockWidget~partial.swiftmodule"
+  }
+}

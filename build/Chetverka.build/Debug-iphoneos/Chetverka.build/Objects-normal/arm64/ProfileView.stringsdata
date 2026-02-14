@@ -1,0 +1,144 @@
+{
+  "source": "/Users/whoiscuzz/PycharmProjects/Chetverka/Chetverka/Views/ProfileView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Профиль",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 105
+        }
+      },
+      {
+        "comment": "",
+        "key": "Не удалось открыть почту",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "Информация",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Администрирование",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Обратная связь",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ класс",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "Профиль не загружен. Перезайди в аккаунт, чтобы вернуть ФИО и классного руководителя.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "Добавить новость",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 65
+        }
+      },
+      {
+        "comment": "",
+        "key": "Выйти",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 115
+        }
+      },
+      {
+        "comment": "",
+        "key": "Новая новость",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 249
+        }
+      },
+      {
+        "comment": "",
+        "key": "Заголовок",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 232
+        }
+      },
+      {
+        "comment": "",
+        "key": "Текст новости",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 236
+        }
+      },
+      {
+        "comment": "",
+        "key": "Например: Изменение расписания",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 233
+        }
+      },
+      {
+        "comment": "",
+        "key": "Отмена",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 252
+        }
+      },
+      {
+        "comment": "",
+        "key": "Публикация...",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 257
+        }
+      },
+      {
+        "comment": "",
+        "key": "Опубликовать",
+        "location": {
+          "startingColumn": 71,
+          "startingLine": 257
+        }
+      }
+    ]
+  },
+  "version": 1
+}

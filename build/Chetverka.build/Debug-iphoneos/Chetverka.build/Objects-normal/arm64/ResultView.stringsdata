@@ -1,0 +1,96 @@
+{
+  "source": "/Users/whoiscuzz/PycharmProjects/Chetverka/Chetverka/Views/ResultView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Итоги",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "Режим",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 21
+        }
+      },
+      {
+        "comment": "",
+        "key": "Средний балл",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "Все четверти",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 87
+        }
+      },
+      {
+        "comment": "",
+        "key": "Обновить",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 102
+        }
+      },
+      {
+        "comment": "",
+        "key": "Оценки по четвертям",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 208
+        }
+      },
+      {
+        "comment": "",
+        "key": "Симулятор",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 233
+        }
+      },
+      {
+        "comment": "",
+        "key": "Открыть симулятор",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 244
+        }
+      },
+      {
+        "comment": "",
+        "key": "Работает для текущей четверти (оценки из дневника).",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 246
+        }
+      },
+      {
+        "comment": "",
+        "key": "Оценок: %lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 295
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: %@",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 406
+        }
+      }
+    ]
+  },
+  "version": 1
+}

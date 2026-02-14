@@ -1,0 +1,96 @@
+{
+  "source": "/Users/whoiscuzz/PycharmProjects/Chetverka/Chetverka/Views/SubjectAnalyticsDetailView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Нет данных для анализа",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "Распределение оценок",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "Оценка",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Количество",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 44
+        }
+      },
+      {
+        "comment": "",
+        "key": "Оценка",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "Динамика среднего балла",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Номер урока",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "Средний балл",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "Номер урока",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "Средний балл",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 76
+        }
+      }
+    ]
+  },
+  "version": 1
+}
