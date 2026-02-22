@@ -1,8 +1,6 @@
 import Foundation
 import Combine
 
-// MARK: - Модель урока для дашборда
-// Легковесная структура, чтобы не тащить всю модель Lesson во View
 struct RecentLesson: Identifiable {
     let id = UUID()
     let subject: String
@@ -12,9 +10,6 @@ struct RecentLesson: Identifiable {
 
 final class DiaryViewModel: ObservableObject {
 
-    // MARK: - Published Properties
-    
-    // For detailed views
     @Published var weeks: [Week] = []
     
     // For NEW Dashboard
