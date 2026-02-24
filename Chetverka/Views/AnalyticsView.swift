@@ -10,7 +10,7 @@ struct AnalyticsView: View {
             ScrollView {
                 VStack(spacing: 20) {
 
-                    // MARK: - Средний балл
+                    
                     RingProgressView(
                         value: viewModel.average,
                         maxValue: 10,
