@@ -39,8 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
 import by.schools.chetverka.data.api.ProfileDto
 import by.schools.chetverka.ui.theme.BlueDeep
+import coil.compose.AsyncImage
 import by.schools.chetverka.ui.theme.BluePrimary
 import by.schools.chetverka.ui.theme.BlueSky
 import by.schools.chetverka.ui.theme.CardWhite
@@ -85,17 +87,26 @@ fun ProfileScreen(
                     colors = CardDefaults.cardColors(containerColor = BlueSky),
                     modifier = Modifier.size(66.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = profile?.fullName?.firstOrNull()?.uppercase() ?: "👤",
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = BlueDeep,
-                            fontWeight = FontWeight.Bold
+                    if (!profile?.avatarUrl.isNullOrBlank()) {
+                        AsyncImage(
+                            model = profile?.avatarUrl,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
                         )
+                    } else {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = profile?.fullName?.firstOrNull()?.uppercase() ?: "👤",
+                                style = MaterialTheme.typography.headlineMedium,
+                                color = BlueDeep,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {

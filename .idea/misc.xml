@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.13" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.14 (Chetverka)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" project-jdk-name="Android API 36.0, extension level 17 Platform" project-jdk-type="Android SDK" />
 </project>

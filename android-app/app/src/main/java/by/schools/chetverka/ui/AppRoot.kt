@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.EmojiEvents
-import androidx.compose.material.icons.rounded.Feed
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material.icons.rounded.Person
@@ -32,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Brush
@@ -44,11 +44,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import by.schools.chetverka.data.api.NewsItem
 import by.schools.chetverka.data.api.ProfileDto
 import by.schools.chetverka.ui.login.LoginScreen
 import by.schools.chetverka.ui.screens.AnalyticsScreen
 import by.schools.chetverka.ui.screens.DashboardScreen
 import by.schools.chetverka.ui.screens.DiaryScreen
+import by.schools.chetverka.ui.screens.NewsDetailScreen
 import by.schools.chetverka.ui.screens.NewsScreen
 import by.schools.chetverka.ui.screens.ProfileScreen
 import by.schools.chetverka.ui.screens.ResultsScreen
@@ -64,7 +66,6 @@ private enum class Tab(
     val icon: ImageVector
 ) {
     Dashboard("Главная", Icons.Rounded.Home),
-    News("Новости", Icons.Rounded.Feed),
     Diary("Дневник", Icons.Rounded.CalendarMonth),
     Analytics("Аналитика", Icons.Rounded.Insights),
     Results("Итоги", Icons.Rounded.EmojiEvents),
@@ -96,6 +97,29 @@ fun AppRoot(viewModel: AppViewModel) {
     }
 }
 
+private sealed class NavOverlay {
+    data object None : NavOverlay()
+    data object NewsFeed : NavOverlay()
+    data class NewsDetail(val item: NewsItem) : NavOverlay()
+}
+
+private val NavOverlaySaver = Saver<NavOverlay, String>(
+    save = {
+        when (it) {
+            is NavOverlay.NewsDetail -> "news_detail:${it.item.id}"
+            NavOverlay.NewsFeed -> "news_feed"
+            NavOverlay.None -> "none"
+        }
+    },
+    restore = {
+        when {
+            it.startsWith("news_detail:") -> NavOverlay.NewsDetail(NewsItem(it.substringAfter(':').toInt(), "", "", "", null))
+            it == "news_feed" -> NavOverlay.NewsFeed
+            else -> NavOverlay.None
+        }
+    }
+)
+
 @Composable
 private fun MainTabs(
     viewModel: AppViewModel,
@@ -105,6 +129,34 @@ private fun MainTabs(
     onLogout: () -> Unit
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(Tab.Dashboard) }
+    var navOverlay by rememberSaveable(saver = NavOverlaySaver) { mutableStateOf<NavOverlay>(NavOverlay.None) }
+
+    fun onRefresh() {
+        viewModel.reloadDiary()
+        viewModel.reloadNews()
+    }
+
+    when (val overlay = navOverlay) {
+        is NavOverlay.NewsFeed -> {
+            NewsScreen(
+                padding = PaddingValues(),
+                state = newsState,
+                onReload = { onRefresh() },
+                onBack = { navOverlay = NavOverlay.None },
+                onItemClick = { navOverlay = NavOverlay.NewsDetail(it) }
+            )
+            return
+        }
+        is NavOverlay.NewsDetail -> {
+            NewsDetailScreen(
+                padding = PaddingValues(),
+                item = overlay.item,
+                onBack = { navOverlay = NavOverlay.None }
+            )
+            return
+        }
+        NavOverlay.None -> { /* fall through to tabs */ }
+    }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -153,11 +205,13 @@ private fun MainTabs(
         }
     ) { padding ->
         when (selectedTab) {
-            Tab.Dashboard -> DashboardScreen(padding = padding, state = diaryState)
-            Tab.News -> NewsScreen(
+            Tab.Dashboard -> DashboardScreen(
                 padding = padding,
-                state = newsState,
-                onReload = viewModel::reloadNews
+                state = diaryState,
+                newsState = newsState,
+                onRefresh = { onRefresh() },
+                onNewsAll = { navOverlay = NavOverlay.NewsFeed },
+                onNewsDetail = { navOverlay = NavOverlay.NewsDetail(it) }
             )
             Tab.Diary -> DiaryScreen(
                 padding = padding,

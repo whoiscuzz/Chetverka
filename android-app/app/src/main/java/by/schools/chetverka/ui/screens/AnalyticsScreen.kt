@@ -1,29 +1,32 @@
 package by.schools.chetverka.ui.screens
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import by.schools.chetverka.ui.EmptyState
 import by.schools.chetverka.ui.SubjectResultUi
+import by.schools.chetverka.ui.components.RingProgressView
 import by.schools.chetverka.ui.theme.AccentDanger
 import by.schools.chetverka.ui.theme.AccentSuccess
 import by.schools.chetverka.ui.theme.AccentWarning
@@ -47,115 +50,106 @@ fun AnalyticsScreen(
         return
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PaddingValues(
+            start = 0.dp,
+            top = padding.calculateTopPadding() + 12.dp,
+            end = 0.dp,
+            bottom = padding.calculateBottomPadding() + 24.dp
+        )
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = padding.calculateTopPadding() + 12.dp),
-            shape = RoundedCornerShape(30.dp),
-            colors = CardDefaults.cardColors(containerColor = CardWhite),
-            border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.7f)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                CircularProgressIndicator(
-                    progress = (average / 10f).toFloat().coerceIn(0f, 1f),
-                    modifier = Modifier.size(74.dp),
-                    strokeWidth = 8.dp,
-                    color = BluePrimary,
-                    trackColor = BluePrimary.copy(alpha = 0.15f)
+                RingProgressView(
+                    value = average,
+                    maxValue = 10.0,
+                    title = "Средний балл",
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
-                Column {
-                    Text(
-                        text = "Средний балл",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = "%.2f / 10".format(average),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = BluePrimary
-                    )
-                    Text(
-                        text = statusText(average),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
             }
         }
-
-        Text(
-            text = "Предметы по успеваемости",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 6.dp)
-        )
-
-        results.take(8).forEach { item ->
-            SubjectProgressCard(
-                subject = item.subject,
-                average = item.average,
-                marksCount = item.marksCount
+        item {
+            Text(
+                text = "Все предметы",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
+        }
+        if (results.isEmpty()) {
+            item {
+                Text(
+                    text = "Нет данных",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+        } else {
+            items(results, key = { it.subject }) { item ->
+                SubjectAnalyticsRow(
+                    subject = item.subject,
+                    average = item.average
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun SubjectProgressCard(subject: String, average: Double, marksCount: Int) {
+private fun SubjectAnalyticsRow(
+    subject: String,
+    average: Double
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = CardWhite),
-        border = BorderStroke(1.dp, BlueSky.copy(alpha = 0.7f))
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.MenuBook,
+                contentDescription = null,
+                tint = BluePrimary,
+                modifier = Modifier.padding(end = 4.dp)
+            )
+            Text(
+                text = subject,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f),
+                maxLines = 1
+            )
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .background(
+                        gradeColor(average),
+                        RoundedCornerShape(10.dp)
+                    )
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
                 Text(
-                    text = subject,
-                    style = MaterialTheme.typography.titleMedium,
+                    text = "%.1f".format(average),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White,
                     fontWeight = FontWeight.SemiBold
                 )
-                Text(
-                    text = "%.2f".format(average),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = gradeColor(average),
-                    fontWeight = FontWeight.Bold
-                )
             }
-            Text(
-                text = "Оценок: $marksCount",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            LinearProgressIndicator(
-                progress = (average / 10f).toFloat().coerceIn(0f, 1f),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(7.dp),
-                color = gradeColor(average),
-                trackColor = gradeColor(average).copy(alpha = 0.14f)
-            )
         }
-    }
-}
-
-private fun statusText(average: Double): String {
-    return when {
-        average >= 8.5 -> "Отличная динамика"
-        average >= 6.5 -> "Хорошо, можно выше"
-        average > 0 -> "Нужен рывок"
-        else -> "Пока без оценок"
     }
 }
 

@@ -21,6 +21,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.TimeoutCancellationException
@@ -104,19 +105,10 @@ class SchoolsByWebClient(appContext: Context) {
             throw SchoolsByWebError.MissingSessionCookie
         }
 
-        runner.load("$base/m/")
-        val href = runner.evalString(
-            """
-            (() => {
-              const a = document.querySelector('a.u_name');
-              return a ? a.getAttribute('href') : null;
-            })()
-            """.trimIndent()
-        )
-        val pupilId = href?.let(::extractPupilId)
-        if (pupilId.isNullOrBlank()) throw SchoolsByWebError.MissingPupilId
+        val (pupilId, activeBase) = resolvePupilIdFromPage(sessionId)
+            ?: throw SchoolsByWebError.MissingPupilId
 
-        runner.load("$base/pupil/$pupilId/")
+        runner.load("$activeBase/pupil/$pupilId/")
         val profilePayloadJson = runner.evalString(
             """
             (() => {
@@ -295,6 +287,37 @@ class SchoolsByWebClient(appContext: Context) {
         }
         Log.i(tag, "fetchDiary parsed weeks=${weeks.size}")
         return DiaryResponse(weeks = weeks.sortedBy { it.monday })
+    }
+
+    private suspend fun resolvePupilIdFromPage(sessionId: String): Pair<String, String>? {
+        val bases = listOf(base, altBase)
+        for (host in bases) {
+            runner.ensureSessionCookie(value = sessionId)
+            if (runCatching { runner.load("$host/m/") }.isFailure) continue
+            delay(1000)
+            val href = runner.evalString(
+                """
+                (() => {
+                  const direct = document.querySelector('a.u_name, a.user_name, a.profile-link');
+                  if (direct) {
+                    const h = direct.getAttribute('href');
+                    if (h && /\/pupil\/\d+/.test(h)) return h;
+                  }
+                  const allAnchors = Array.from(document.querySelectorAll('a[href]'));
+                  for (const a of allAnchors) {
+                    const href = a.getAttribute('href') || '';
+                    if (/\/pupil\/\d+/.test(href)) return href;
+                  }
+                  const html = document.documentElement?.innerHTML || '';
+                  const match = html.match(/\/pupil\/(\d+)/);
+                  return match ? '/pupil/' + match[1] : null;
+                })()
+                """.trimIndent()
+            )
+            val id = href?.let(::extractPupilId)
+            if (!id.isNullOrBlank()) return id to host
+        }
+        return null
     }
 
     private fun extractPupilId(href: String): String? {
