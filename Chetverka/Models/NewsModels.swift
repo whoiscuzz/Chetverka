@@ -7,6 +7,7 @@ struct NewsItem: Codable, Identifiable, Equatable {
     let createdAt: String
     let isPublished: Bool?
     let authorName: String?
+    let imageURL: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -15,6 +16,7 @@ struct NewsItem: Codable, Identifiable, Equatable {
         case createdAt = "created_at"
         case isPublished = "is_published"
         case authorName = "author_name"
+        case imageURL = "image_url"
     }
 
     var date: Date? {
@@ -44,11 +46,13 @@ struct CreateNewsPayload: Encodable {
     let body: String
     let isPublished: Bool
     let authorName: String
+    let imageURL: String?
 
     enum CodingKeys: String, CodingKey {
         case title
         case body
         case isPublished = "is_published"
         case authorName = "author_name"
+        case imageURL = "image_url"
     }
 }

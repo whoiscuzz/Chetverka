@@ -185,11 +185,18 @@ class AppViewModel(
         }
     }
 
-    fun publishNews(title: String, body: String) {
-        val author = appState.value.profile?.fullName ?: "Admin"
+    fun publishNews(title: String, body: String, imageUrl: String?) {
+        val author = "fimacuzz"
         viewModelScope.launch {
             _newsState.update { it.copy(isLoading = true, error = null) }
-            runCatching { newsService.publish(title = title, body = body, authorName = author) }
+            runCatching {
+                newsService.publish(
+                    title = title,
+                    body = body,
+                    authorName = author,
+                    imageUrl = imageUrl
+                )
+            }
                 .onSuccess { created ->
                     _newsState.update {
                         it.copy(

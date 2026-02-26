@@ -6,20 +6,74 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A1B2C3D42F30000100000007 /* ChetverkaWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A1B2C3D42F30000100000001 /* ChetverkaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A1B2C3D42F3000010000000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B4A4E702F26861B007682BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1B2C3D42F30000100000008;
+			remoteInfo = ChetverkaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A1B2C3D42F30000100000006 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A1B2C3D42F30000100000007 /* ChetverkaWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3B4A4E782F26861B007682BC /* Chetverka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chetverka.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D42F30000100000001 /* ChetverkaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChetverkaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3BFEB25A2F43520600D1659F /* Exceptions for "Chetverka" folder in "Chetverka" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppIcon.icon,
+			);
+			target = 3B4A4E772F26861B007682BC /* Chetverka */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3B4A4E7A2F26861B007682BC /* Chetverka */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3BFEB25A2F43520600D1659F /* Exceptions for "Chetverka" folder in "Chetverka" target */,
+			);
 			path = Chetverka;
+			sourceTree = "<group>";
+		};
+		A1B2C3D42F30000100000002 /* ChetverkaWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ChetverkaWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3B4A4E752F26861B007682BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1B2C3D42F30000100000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				3B4A4E7A2F26861B007682BC /* Chetverka */,
+				A1B2C3D42F30000100000002 /* ChetverkaWidget */,
 				3B4A4E792F26861B007682BC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				3B4A4E782F26861B007682BC /* Chetverka.app */,
+				A1B2C3D42F30000100000001 /* ChetverkaWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +111,12 @@
 				3B4A4E742F26861B007682BC /* Sources */,
 				3B4A4E752F26861B007682BC /* Frameworks */,
 				3B4A4E762F26861B007682BC /* Resources */,
+				A1B2C3D42F30000100000006 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A1B2C3D42F3000010000000C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3B4A4E7A2F26861B007682BC /* Chetverka */,
@@ -69,6 +127,28 @@
 			productName = Chetverka;
 			productReference = 3B4A4E782F26861B007682BC /* Chetverka.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A1B2C3D42F30000100000008 /* ChetverkaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D42F30000100000009 /* Build configuration list for PBXNativeTarget "ChetverkaWidget" */;
+			buildPhases = (
+				A1B2C3D42F30000100000003 /* Sources */,
+				A1B2C3D42F30000100000004 /* Frameworks */,
+				A1B2C3D42F30000100000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A1B2C3D42F30000100000002 /* ChetverkaWidget */,
+			);
+			name = ChetverkaWidget;
+			packageProductDependencies = (
+			);
+			productName = ChetverkaWidget;
+			productReference = A1B2C3D42F30000100000001 /* ChetverkaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -82,6 +162,19 @@
 				TargetAttributes = {
 					3B4A4E772F26861B007682BC = {
 						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					A1B2C3D42F30000100000008 = {
+						CreatedOnToolsVersion = 26.2;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -100,12 +193,20 @@
 			projectRoot = "";
 			targets = (
 				3B4A4E772F26861B007682BC /* Chetverka */,
+				A1B2C3D42F30000100000008 /* ChetverkaWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3B4A4E762F26861B007682BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1B2C3D42F30000100000005 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +223,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A1B2C3D42F30000100000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A1B2C3D42F3000010000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A1B2C3D42F30000100000008 /* ChetverkaWidget */;
+			targetProxy = A1B2C3D42F3000010000000D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3B4A4E812F26861C007682BC /* Debug */ = {
@@ -251,15 +367,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chetverka/Chetverka.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DSHL79B546;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_ADMIN_EMAIL = "chetverka@proton.me";
-				INFOPLIST_KEY_ADMIN_PASSWORD = "g9U2Q7$kUhCDp7xmCbcRVw#px!r";
-				INFOPLIST_KEY_NEWS_API_BASE_URL = "https://cfxymbnlgfbpgxsysrah.supabase.co";
-				INFOPLIST_KEY_NEWS_API_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo;
+				INFOPLIST_KEY_ADMIN_EMAIL = "$(ADMIN_EMAIL)";
+				INFOPLIST_KEY_ADMIN_PASSWORD = "$(ADMIN_PASSWORD)";
+				INFOPLIST_KEY_NEWS_API_BASE_URL = "$(NEWS_API_BASE_URL)";
+				INFOPLIST_KEY_NEWS_API_KEY = "$(NEWS_API_KEY)";
+				NEWS_API_BASE_URL = "https://cfxymbnlgfbpgxsysrah.supabase.co";
+				NEWS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo";
+				ADMIN_EMAIL = "chetverka@proton.me";
+				ADMIN_PASSWORD = "g9U2Q7$kUhCDp7xmCbcRVw#px!r";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,15 +410,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Chetverka/Chetverka.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DSHL79B546;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_ADMIN_EMAIL = "chetverka@proton.me";
-				INFOPLIST_KEY_ADMIN_PASSWORD = "g9U2Q7$kUhCDp7xmCbcRVw#px!r";
-				INFOPLIST_KEY_NEWS_API_BASE_URL = "https://cfxymbnlgfbpgxsysrah.supabase.co";
-				INFOPLIST_KEY_NEWS_API_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo;
+				INFOPLIST_KEY_ADMIN_EMAIL = "$(ADMIN_EMAIL)";
+				INFOPLIST_KEY_ADMIN_PASSWORD = "$(ADMIN_PASSWORD)";
+				INFOPLIST_KEY_NEWS_API_BASE_URL = "$(NEWS_API_BASE_URL)";
+				INFOPLIST_KEY_NEWS_API_KEY = "$(NEWS_API_KEY)";
+				NEWS_API_BASE_URL = "https://cfxymbnlgfbpgxsysrah.supabase.co";
+				NEWS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo";
+				ADMIN_EMAIL = "chetverka@proton.me";
+				ADMIN_PASSWORD = "g9U2Q7$kUhCDp7xmCbcRVw#px!r";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -320,6 +448,56 @@
 			};
 			name = Release;
 		};
+		A1B2C3D42F3000010000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ChetverkaWidget/ChetverkaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DSHL79B546;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Config/ChetverkaWidget-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = school.Chetverka.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A1B2C3D42F3000010000000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ChetverkaWidget/ChetverkaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DSHL79B546;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Config/ChetverkaWidget-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = school.Chetverka.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -337,6 +515,15 @@
 			buildConfigurations = (
 				3B4A4E842F26861C007682BC /* Debug */,
 				3B4A4E852F26861C007682BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D42F30000100000009 /* Build configuration list for PBXNativeTarget "ChetverkaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D42F3000010000000A /* Debug */,
+				A1B2C3D42F3000010000000B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

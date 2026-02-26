@@ -1,5 +1,6 @@
 package by.schools.chetverka.data.news
 
+import by.schools.chetverka.BuildConfig
 import by.schools.chetverka.data.api.CreateNewsPayload
 import by.schools.chetverka.data.api.NewsItem
 import kotlinx.coroutines.Dispatchers
@@ -30,18 +31,15 @@ class NewsService(
         isLenient = true
     }
 
-    private val fallbackBaseUrl = "https://cfxymbnlgfbpgxsysrah.supabase.co"
-    private val fallbackApiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmeHltYm5sZ2ZicGd4c3lzcmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTMxOTQsImV4cCI6MjA4NjMyOTE5NH0.T8pk05YEcFbpgh5sR2gMKW8ek0qWKL84rekvOgxwbFo"
-    private val fallbackAdminEmail = "chetverka@proton.me"
-    private val fallbackAdminPassword = "g9U2Q7\$kUhCDp7xmCbcRVw#px!r"
-
     suspend fun fetchPublished(): List<NewsItem> = withContext(Dispatchers.IO) {
-        val url = "${baseUrl()}/rest/v1/news?select=id,title,body,created_at,is_published,author_name&is_published=eq.true&order=created_at.desc"
+        val baseUrl = baseUrlOrNull() ?: throw NewsServiceError.MissingConfig
+        val apiKey = apiKeyOrNull() ?: throw NewsServiceError.MissingConfig
+        val url = "$baseUrl/rest/v1/news?select=id,title,body,created_at,is_published,author_name,image_url&is_published=eq.true&order=created_at.desc"
         val request = Request.Builder()
             .url(url)
             .addHeader("Accept", "application/json")
-            .addHeader("apikey", apiKey())
-            .addHeader("Authorization", "Bearer ${apiKey()}")
+            .addHeader("apikey", apiKey)
+            .addHeader("Authorization", "Bearer $apiKey")
             .get()
             .build()
 
@@ -55,20 +53,23 @@ class NewsService(
         }
     }
 
-    suspend fun publish(title: String, body: String, authorName: String): NewsItem = withContext(Dispatchers.IO) {
+    suspend fun publish(title: String, body: String, authorName: String, imageUrl: String?): NewsItem = withContext(Dispatchers.IO) {
+        val baseUrl = baseUrlOrNull() ?: throw NewsServiceError.MissingConfig
+        val apiKey = apiKeyOrNull() ?: throw NewsServiceError.MissingConfig
         val token = fetchAdminAccessToken()
         val payload = CreateNewsPayload(
             title = title,
             body = body,
             is_published = true,
-            author_name = authorName
+            author_name = authorName,
+            image_url = imageUrl
         )
         val request = Request.Builder()
-            .url("${baseUrl()}/rest/v1/news")
+            .url("$baseUrl/rest/v1/news")
             .addHeader("Content-Type", "application/json")
             .addHeader("Accept", "application/json")
             .addHeader("Prefer", "return=representation")
-            .addHeader("apikey", apiKey())
+            .addHeader("apikey", apiKey)
             .addHeader("Authorization", "Bearer $token")
             .post(json.encodeToString(payload).toRequestBody("application/json".toMediaType()))
             .build()
@@ -89,13 +90,17 @@ class NewsService(
         }
     }
 
-    private fun baseUrl(): String = fallbackBaseUrl
-    private fun apiKey(): String = fallbackApiKey
+    private fun baseUrlOrNull(): String? = BuildConfig.NEWS_API_BASE_URL.trim().ifEmpty { null }
+    private fun apiKeyOrNull(): String? = BuildConfig.NEWS_API_KEY.trim().ifEmpty { null }
+    private fun adminEmailOrNull(): String? = BuildConfig.ADMIN_EMAIL.trim().ifEmpty { null }
+    private fun adminPasswordOrNull(): String? = BuildConfig.ADMIN_PASSWORD.trim().ifEmpty { null }
 
     private suspend fun fetchAdminAccessToken(): String = withContext(Dispatchers.IO) {
-        val email = fallbackAdminEmail
-        val password = fallbackAdminPassword
-        if (email.isBlank() || password.isBlank()) {
+        val baseUrl = baseUrlOrNull() ?: throw NewsServiceError.MissingConfig
+        val apiKey = apiKeyOrNull() ?: throw NewsServiceError.MissingConfig
+        val email = adminEmailOrNull()
+        val password = adminPasswordOrNull()
+        if (email == null || password == null) {
             throw NewsServiceError.MissingAdminCredentials
         }
 
@@ -107,10 +112,10 @@ class NewsService(
 
         val payload = json.encodeToString(AuthRequest(email = email, password = password))
         val request = Request.Builder()
-            .url("${baseUrl()}/auth/v1/token?grant_type=password")
+            .url("$baseUrl/auth/v1/token?grant_type=password")
             .addHeader("Content-Type", "application/json")
             .addHeader("Accept", "application/json")
-            .addHeader("apikey", apiKey())
+            .addHeader("apikey", apiKey)
             .post(payload.toRequestBody("application/json".toMediaType()))
             .build()
 

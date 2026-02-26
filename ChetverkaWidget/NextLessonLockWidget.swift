@@ -3,7 +3,6 @@ import SwiftUI
 
 private struct NextLessonWidgetPayload: Codable {
     let lessonTitle: String
-    let lessonDate: String
     let cabinet: String
     let updatedAt: Date
 }
@@ -11,7 +10,6 @@ private struct NextLessonWidgetPayload: Codable {
 private struct NextLessonWidgetEntry: TimelineEntry {
     let date: Date
     let lessonTitle: String
-    let lessonDate: String
     let cabinet: String
 }
 
@@ -23,7 +21,6 @@ private struct NextLessonProvider: TimelineProvider {
         NextLessonWidgetEntry(
             date: .now,
             lessonTitle: "Математика",
-            lessonDate: "сегодня",
             cabinet: "каб. 322"
         )
     }
@@ -45,7 +42,6 @@ private struct NextLessonProvider: TimelineProvider {
             return NextLessonWidgetEntry(
                 date: .now,
                 lessonTitle: "Нет данных",
-                lessonDate: "Открой приложение",
                 cabinet: "Не указан"
             )
         }
@@ -53,7 +49,6 @@ private struct NextLessonProvider: TimelineProvider {
         return NextLessonWidgetEntry(
             date: payload.updatedAt,
             lessonTitle: payload.lessonTitle,
-            lessonDate: payload.lessonDate,
             cabinet: payload.cabinet
         )
     }
@@ -63,16 +58,32 @@ private struct NextLessonLockView: View {
     var entry: NextLessonProvider.Entry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: "book.closed.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.blue)
+                Text("Следующий урок")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+
             Text(entry.lessonTitle)
                 .font(.caption)
-                .bold()
+                .fontWeight(.semibold)
                 .lineLimit(1)
 
-            Text("\(entry.lessonDate) · \(entry.cabinet)")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .lineLimit(1)
+            HStack(spacing: 6) {
+                Image(systemName: "door.left.hand.open")
+                    .font(.caption2)
+                    .foregroundStyle(.teal)
+                Text(entry.cabinet)
+                    .font(.caption2)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                Spacer()
+            }
         }
     }
 }
@@ -83,9 +94,23 @@ struct NextLessonLockWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: NextLessonProvider()) { entry in
             NextLessonLockView(entry: entry)
+                .widgetBackgroundFix()
         }
         .configurationDisplayName("Следующий урок")
         .description("Кабинет и ближайший урок на экране блокировки.")
         .supportedFamilies([.accessoryRectangular])
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func widgetBackgroundFix() -> some View {
+        if #available(iOS 17.0, *) {
+            containerBackground(for: .widget) {
+                Color.clear
+            }
+        } else {
+            self
+        }
     }
 }

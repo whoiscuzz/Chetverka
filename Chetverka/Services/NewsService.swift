@@ -52,9 +52,7 @@ struct NewsService {
     }
 
     func fetchPublished() async throws -> [NewsItem] {
-        guard let request = makeFetchRequest() else {
-            throw NewsServiceError.missingConfig
-        }
+        let request = makeFetchRequest()
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw NewsServiceError.invalidResponse
@@ -71,8 +69,8 @@ struct NewsService {
         return try decoder.decode([NewsItem].self, from: data)
     }
 
-    func publish(title: String, body: String, authorName: String) async throws -> NewsItem {
-        guard let request = try await makePublishRequest(title: title, body: body, authorName: authorName) else {
+    func publish(title: String, body: String, authorName: String, imageURL: String?) async throws -> NewsItem {
+        guard let request = try await makePublishRequest(title: title, body: body, authorName: authorName, imageURL: imageURL) else {
             throw NewsServiceError.missingConfig
         }
         let (data, response) = try await session.data(for: request)
@@ -98,25 +96,31 @@ struct NewsService {
         throw NewsServiceError.invalidResponse
     }
 
-    private func makeFetchRequest() -> URLRequest? {
-        guard let baseURL, let apiKey else { return nil }
-        guard var components = URLComponents(string: "\(baseURL)/rest/v1/news") else { return nil }
-        components.queryItems = [
-            URLQueryItem(name: "select", value: "id,title,body,created_at,is_published,author_name"),
-            URLQueryItem(name: "is_published", value: "eq.true"),
-            URLQueryItem(name: "order", value: "created_at.desc")
-        ]
-        guard let url = components.url else { return nil }
+    private func makeFetchRequest() -> URLRequest {
+        let resolvedBaseURL = baseURL ?? fallbackBaseURL
+        let resolvedApiKey = apiKey ?? fallbackApiKey
+        let fallbackURL = URL(string: "\(fallbackBaseURL)/rest/v1/news?select=id,title,body,created_at,is_published,author_name,image_url&is_published=eq.true&order=created_at.desc")!
+        let url: URL
+        if var components = URLComponents(string: "\(resolvedBaseURL)/rest/v1/news") {
+            components.queryItems = [
+                URLQueryItem(name: "select", value: "id,title,body,created_at,is_published,author_name,image_url"),
+                URLQueryItem(name: "is_published", value: "eq.true"),
+                URLQueryItem(name: "order", value: "created_at.desc")
+            ]
+            url = components.url ?? fallbackURL
+        } else {
+            url = fallbackURL
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue(apiKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue(resolvedApiKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(resolvedApiKey)", forHTTPHeaderField: "Authorization")
         return request
     }
 
-    private func makePublishRequest(title: String, body: String, authorName: String) async throws -> URLRequest? {
+    private func makePublishRequest(title: String, body: String, authorName: String, imageURL: String?) async throws -> URLRequest? {
         guard let baseURL, let apiKey else { return nil }
         guard let accessToken = try await fetchAdminAccessToken(baseURL: baseURL, apiKey: apiKey) else {
             throw NewsServiceError.missingAdminCredentials
@@ -135,7 +139,8 @@ struct NewsService {
             title: title,
             body: body,
             isPublished: true,
-            authorName: authorName
+            authorName: authorName,
+            imageURL: imageURL
         )
         request.httpBody = try JSONEncoder().encode(payload)
         return request

@@ -1,11 +1,13 @@
 package by.schools.chetverka.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,7 @@ import by.schools.chetverka.ui.EmptyState
 import by.schools.chetverka.ui.NewsUiState
 import by.schools.chetverka.ui.theme.BlueSky
 import by.schools.chetverka.ui.theme.CardWhite
+import coil.compose.AsyncImage
 
 @Composable
 fun NewsScreen(
@@ -131,6 +134,16 @@ private fun NewsCard(item: NewsItem) {
                 maxLines = if (expanded.value) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis
             )
+            if (!item.image_url.isNullOrBlank()) {
+                AsyncImage(
+                    model = item.image_url,
+                    contentDescription = "Фото новости",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(14.dp))
+                )
+            }
             Text(
                 text = item.body,
                 style = MaterialTheme.typography.bodyMedium,

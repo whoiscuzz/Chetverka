@@ -69,10 +69,11 @@ struct Lesson: Identifiable, Codable, Equatable {
     let subject: String
     let mark: String?
     let hw: String?
+    let cabinet: String?
     let attachments: [LessonAttachment]?
 
     enum CodingKeys: String, CodingKey {
-        case subject, mark, hw, attachments
+        case subject, mark, hw, cabinet, attachments
     }
 
     /// Преобразование строковой оценки (в т.ч. дробной "8/9") в число для Badge

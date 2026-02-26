@@ -181,7 +181,9 @@ private fun MainTabs(
                 isAdmin = viewModel.isCurrentUserAdmin(),
                 newsError = newsState.error,
                 onReload = viewModel::reloadDiary,
-                onPublishNews = viewModel::publishNews,
+                onPublishNews = { title, body, imageUrl ->
+                    viewModel.publishNews(title = title, body = body, imageUrl = imageUrl)
+                },
                 onLogout = onLogout
             )
         }

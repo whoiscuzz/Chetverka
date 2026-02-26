@@ -118,7 +118,7 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $showNewsComposer) {
                 AdminNewsComposerSheet(
-                    authorName: viewModel.profile?.fullName ?? "Admin",
+                    authorName: "fimacuzz",
                     newsViewModel: newsViewModel
                 )
             }
@@ -223,6 +223,7 @@ private struct AdminNewsComposerSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var title = ""
     @State private var contentText = ""
+    @State private var imageURLText = ""
     @State private var isPublishing = false
     @State private var errorMessage: String?
 
@@ -236,6 +237,12 @@ private struct AdminNewsComposerSheet: View {
                 Section("Текст новости") {
                     TextEditor(text: $contentText)
                         .frame(minHeight: 180)
+                }
+
+                Section("Фото (ссылка)") {
+                    TextField("https://...", text: $imageURLText)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled(true)
                 }
 
                 if let errorMessage {
@@ -270,7 +277,18 @@ private struct AdminNewsComposerSheet: View {
     private func publish() {
         let cleanTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let cleanBody = contentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanImageURL = imageURLText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleanTitle.isEmpty, !cleanBody.isEmpty else { return }
+
+        let validatedImageURL: String?
+        if cleanImageURL.isEmpty {
+            validatedImageURL = nil
+        } else if URL(string: cleanImageURL) != nil {
+            validatedImageURL = cleanImageURL
+        } else {
+            errorMessage = "Укажи корректную ссылку на фото (https://...) или оставь поле пустым."
+            return
+        }
 
         isPublishing = true
         errorMessage = nil
@@ -278,7 +296,12 @@ private struct AdminNewsComposerSheet: View {
         Task { @MainActor in
             defer { isPublishing = false }
             do {
-                try await newsViewModel.publish(title: cleanTitle, body: cleanBody, authorName: authorName)
+                try await newsViewModel.publish(
+                    title: cleanTitle,
+                    body: cleanBody,
+                    authorName: authorName,
+                    imageURL: validatedImageURL
+                )
                 dismiss()
             } catch {
                 errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription

@@ -422,6 +422,7 @@ final class SchoolsByWebClient {
                       subject = subject.replace(/^\\d+[\\.\\)]\\s*/, '');
                       const hw = tr.querySelector('div.ht-text')?.textContent?.replace(/\\s+/g, ' ').trim() ?? null;
                       const mark = tr.querySelector('td.mark strong')?.textContent?.trim() ?? null;
+                      const cabinet = tr.querySelector('span.cabinet')?.textContent?.replace(/\\s+/g, ' ').trim() ?? null;
 
                       const attachments = [];
                       const pushAttachment = (name, href, type) => {
@@ -460,8 +461,8 @@ final class SchoolsByWebClient {
                         dedup.push(item);
                       }
 
-                      if (!subject && !hw && !mark) continue;
-                      lessons.push({ subject, mark, hw, attachments: dedup });
+                      if (!subject && !hw && !mark && !cabinet) continue;
+                      lessons.push({ subject, mark, hw, cabinet, attachments: dedup });
                     }
                     resultDays.push({ name: dayName, lessons });
                   }
@@ -480,6 +481,7 @@ final class SchoolsByWebClient {
                         let subject: String
                         let mark: String?
                         let hw: String?
+                        let cabinet: String?
                         let attachments: [AttachmentPayload]?
                     }
                     let name: String
@@ -520,7 +522,13 @@ final class SchoolsByWebClient {
                             type: a.type
                         )
                     }
-                    return Lesson(subject: lp.subject, mark: lp.mark, hw: lp.hw, attachments: attachments.isEmpty ? nil : attachments)
+                    return Lesson(
+                        subject: lp.subject,
+                        mark: lp.mark,
+                        hw: lp.hw,
+                        cabinet: lp.cabinet,
+                        attachments: attachments.isEmpty ? nil : attachments
+                    )
                 }
                 return Day(date: date, name: d.name, lessons: lessons)
             }
@@ -1103,6 +1111,7 @@ final class SchoolsByWebClient {
                     subject: lesson.subject,
                     mark: lesson.mark,
                     hw: lesson.hw,
+                    cabinet: lesson.cabinet,
                     attachments: attachments.isEmpty ? nil : attachments
                 )
                 resolvedLessons.append(resolvedLesson)

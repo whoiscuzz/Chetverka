@@ -17,6 +17,9 @@ final class DiaryViewModel: ObservableObject {
     @Published var recentLessons: [RecentLesson] = []
     @Published var subjectsForAttention: [(name: String, average: Double)] = []
     @Published var todayLessons: [Lesson] = []
+    @Published var nextLessonTitle: String = "—"
+    @Published var nextLessonDate: String = "—"
+    @Published var nextLessonCabinet: String = "Не указан"
     
     // For OLD Dashboard (StatCards)
     @Published var lessonsTodayCount: String = "—"
@@ -49,6 +52,9 @@ final class DiaryViewModel: ObservableObject {
         recentLessons = []
         subjectsForAttention = []
         todayLessons = []
+        nextLessonTitle = "—"
+        nextLessonDate = "—"
+        nextLessonCabinet = "Не указан"
         lessonsTodayCount = "—"
         homeworkTodayCount = "—"
         overallAverageGrade = "—"
@@ -114,6 +120,7 @@ final class DiaryViewModel: ObservableObject {
         // --- Вычисляем НОВЫЕ данные для дашборда ---
         calculateRecentLessons(from: allLessons)
         calculateSubjectsForAttention(from: allLessons)
+        calculateNextLessonWidget(from: response.weeks)
     }
     
     private func calculateStatCardMetrics(lessons: [Lesson], weeks: [Week]) {
@@ -178,6 +185,78 @@ final class DiaryViewModel: ObservableObject {
         
         self.subjectsForAttention = Array(sortedWeak.prefix(2))
     }
+
+    /// Расчет виджетов "Следующий урок" и "Кабинет"
+    private func calculateNextLessonWidget(from weeks: [Week]) {
+        if isWeekendToday() {
+            self.nextLessonTitle = "На сегодня уроков нет"
+            self.nextLessonDate = "Выходной"
+            self.nextLessonCabinet = "—"
+            NextLessonWidgetStore.save(
+                lessonTitle: self.nextLessonTitle,
+                cabinet: self.nextLessonCabinet
+            )
+            return
+        }
+
+        let today = todayDateString()
+        let sortedWeeks = weeks.sorted { $0.monday < $1.monday }
+
+        for week in sortedWeeks {
+            let sortedDays = week.days.sorted { $0.date < $1.date }
+            for day in sortedDays where day.date >= today {
+                if let lesson = day.lessons.first {
+                    self.nextLessonTitle = lesson.subject.trimmingCharacters(in: .whitespacesAndNewlines)
+                    self.nextLessonDate = formattedDate(day.date)
+                    self.nextLessonCabinet = extractCabinet(from: lesson) ?? "Не указан"
+                    NextLessonWidgetStore.save(
+                        lessonTitle: self.nextLessonTitle,
+                        cabinet: self.nextLessonCabinet
+                    )
+                    return
+                }
+            }
+        }
+
+        self.nextLessonTitle = "Уроков нет"
+        self.nextLessonDate = "—"
+        self.nextLessonCabinet = "Не указан"
+        NextLessonWidgetStore.save(
+            lessonTitle: self.nextLessonTitle,
+            cabinet: self.nextLessonCabinet
+        )
+    }
+
+    private func extractCabinet(from lesson: Lesson) -> String? {
+        if let cabinet = lesson.cabinet?.trimmingCharacters(in: .whitespacesAndNewlines), !cabinet.isEmpty {
+            return "каб. \(cabinet)"
+        }
+        if let fromSubject = firstCabinetMatch(in: lesson.subject) {
+            return fromSubject
+        }
+        if let hw = lesson.hw, let fromHW = firstCabinetMatch(in: hw) {
+            return fromHW
+        }
+        return nil
+    }
+
+    private func firstCabinetMatch(in text: String) -> String? {
+        let pattern = #"(?i)\bкаб(?:инет)?\.?\s*([0-9A-Za-zА-Яа-я\-]+)\b"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return nil }
+        let ns = text as NSString
+        let range = NSRange(location: 0, length: ns.length)
+        guard let match = regex.firstMatch(in: text, options: [], range: range),
+              match.numberOfRanges > 1 else {
+            return nil
+        }
+        let cabinet = ns.substring(with: match.range(at: 1))
+        return "каб. \(cabinet)"
+    }
+
+    private func isWeekendToday() -> Bool {
+        let weekday = Calendar.current.component(.weekday, from: Date())
+        return weekday == 1 || weekday == 7
+    }
     
     /// Возвращает "рофл" коммент для оценки
     private func comment(for mark: Int) -> String {
@@ -195,6 +274,19 @@ final class DiaryViewModel: ObservableObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: Date())
+    }
+
+    private func formattedDate(_ isoDate: String) -> String {
+        let source = DateFormatter()
+        source.locale = Locale(identifier: "en_US_POSIX")
+        source.dateFormat = "yyyy-MM-dd"
+
+        guard let date = source.date(from: isoDate) else { return isoDate }
+
+        let target = DateFormatter()
+        target.locale = Locale(identifier: "ru_RU")
+        target.dateFormat = "d MMMM"
+        return target.string(from: date)
     }
 
     /// Находит индекс недели, которая содержит сегодняшнюю дату.

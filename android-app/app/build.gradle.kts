@@ -4,6 +4,17 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
+fun quoteBuildConfig(value: String): String {
+    return "\"" + value
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"") + "\""
+}
+
+val newsApiBaseUrl = (findProperty("NEWS_API_BASE_URL") as String?) ?: ""
+val newsApiKey = (findProperty("NEWS_API_KEY") as String?) ?: ""
+val adminEmail = (findProperty("ADMIN_EMAIL") as String?) ?: ""
+val adminPassword = (findProperty("ADMIN_PASSWORD") as String?) ?: ""
+
 android {
     namespace = "by.schools.chetverka"
     compileSdk = 35
@@ -17,6 +28,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8000/\"")
+        buildConfigField("String", "NEWS_API_BASE_URL", quoteBuildConfig(newsApiBaseUrl))
+        buildConfigField("String", "NEWS_API_KEY", quoteBuildConfig(newsApiKey))
+        buildConfigField("String", "ADMIN_EMAIL", quoteBuildConfig(adminEmail))
+        buildConfigField("String", "ADMIN_PASSWORD", quoteBuildConfig(adminPassword))
     }
 
     buildTypes {
@@ -74,6 +89,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")

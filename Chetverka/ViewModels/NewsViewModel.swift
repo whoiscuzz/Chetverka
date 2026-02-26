@@ -27,8 +27,13 @@ final class NewsViewModel: ObservableObject {
         }
     }
 
-    func publish(title: String, body: String, authorName: String) async throws {
-        let created = try await NewsService.shared.publish(title: title, body: body, authorName: authorName)
+    func publish(title: String, body: String, authorName: String, imageURL: String?) async throws {
+        let created = try await NewsService.shared.publish(
+            title: title,
+            body: body,
+            authorName: authorName,
+            imageURL: imageURL
+        )
         items.insert(created, at: 0)
         hasLoadedOnce = true
     }

@@ -54,7 +54,7 @@ fun ProfileScreen(
     isAdmin: Boolean,
     newsError: String?,
     onReload: () -> Unit,
-    onPublishNews: (title: String, body: String) -> Unit,
+    onPublishNews: (title: String, body: String, imageUrl: String?) -> Unit,
     onLogout: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
@@ -219,8 +219,8 @@ fun ProfileScreen(
     if (showPublishDialog) {
         PublishNewsDialog(
             onDismiss = { showPublishDialog = false },
-            onPublish = { title, body ->
-                onPublishNews(title, body)
+            onPublish = { title, body, imageUrl ->
+                onPublishNews(title, body, imageUrl)
                 showPublishDialog = false
             }
         )
@@ -230,10 +230,11 @@ fun ProfileScreen(
 @Composable
 private fun PublishNewsDialog(
     onDismiss: () -> Unit,
-    onPublish: (title: String, body: String) -> Unit
+    onPublish: (title: String, body: String, imageUrl: String?) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var body by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -254,11 +255,21 @@ private fun PublishNewsDialog(
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 4
                 )
+                OutlinedTextField(
+                    value = imageUrl,
+                    onValueChange = { imageUrl = it },
+                    label = { Text("Ссылка на фото (https://...) ") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { onPublish(title.trim(), body.trim()) },
+                onClick = {
+                    val cleanImageUrl = imageUrl.trim().ifBlank { null }
+                    onPublish(title.trim(), body.trim(), cleanImageUrl)
+                },
                 enabled = title.isNotBlank() && body.isNotBlank()
             ) {
                 Text("Опубликовать")

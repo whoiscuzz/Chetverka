@@ -104,7 +104,8 @@ data class NewsItem(
     val body: String,
     val created_at: String,
     val is_published: Boolean? = null,
-    val author_name: String? = null
+    val author_name: String? = null,
+    val image_url: String? = null
 )
 
 @Serializable
@@ -112,5 +113,6 @@ data class CreateNewsPayload(
     val title: String,
     val body: String,
     val is_published: Boolean,
-    val author_name: String
+    val author_name: String,
+    val image_url: String? = null
 )

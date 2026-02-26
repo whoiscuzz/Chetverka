@@ -99,7 +99,7 @@ struct DashboardView: View {
             }
         }
     }
-    
+
     private var statCardsSection: some View {
         HStack(spacing: 12) {
             StatCard(title: "Уроков", value: viewModel.lessonsTodayCount, icon: "book.closed", color: .orange)
@@ -175,11 +175,36 @@ struct DashboardView: View {
 struct NewsCard: View {
     let item: NewsItem
 
+    private var validImageURL: URL? {
+        guard let raw = item.imageURL, !raw.isEmpty else { return nil }
+        return URL(string: raw)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(item.title)
                 .font(.headline)
                 .multilineTextAlignment(.leading)
+
+            if let validImageURL {
+                AsyncImage(url: validImageURL) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    default:
+                        ZStack {
+                            Color.secondary.opacity(0.15)
+                            Image(systemName: "photo")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 170)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
 
             Text(item.body)
                 .font(.subheadline)
@@ -303,6 +328,7 @@ struct StatCard: View {
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
 }
+
 
 #Preview {
     DashboardView()
