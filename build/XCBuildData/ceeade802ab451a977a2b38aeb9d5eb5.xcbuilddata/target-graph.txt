@@ -1,4 +1,0 @@
-Target dependency graph (2 targets)
-Target 'Chetverka' in project 'Chetverka'
-➜ Explicit dependency on target 'ChetverkaWidget' in project 'Chetverka'
-Target 'ChetverkaWidget' in project 'Chetverka' (no dependencies)
