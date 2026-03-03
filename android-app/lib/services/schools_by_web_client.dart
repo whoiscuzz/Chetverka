@@ -187,7 +187,7 @@ class SchoolsByWebClient {
 
     final csrf = _firstRegexCapture(
       getResponse.body,
-      r'name=["\']csrfmiddlewaretoken["\'][^>]*value=["\']([^"\']+)["\']',
+      "name=[\"']csrfmiddlewaretoken[\"'][^>]*value=[\"']([^\"']+)[\"']",
     );
     if (csrf == null || csrf.isEmpty) {
       throw const SchoolsByError('Не удалось получить CSRF токен.');
@@ -295,7 +295,7 @@ class SchoolsByWebClient {
 
       if (response.statusCode < 200 || response.statusCode > 399) continue;
 
-      final href = _firstRegexCapture(response.body, r'(\/pupil\/\d+[^"\']*)');
+      final href = _firstRegexCapture(response.body, "(\\/pupil\\/\\d+[^\"']*)");
       final pupilId = href == null ? null : _extractPupilId(href);
       if (pupilId != null && pupilId.isNotEmpty) {
         return (pupilId, host);
@@ -606,9 +606,7 @@ class SchoolsByWebClient {
           row.querySelector('div.ht-text')?.text ?? row.querySelector('td.ht')?.text ?? '',
         ));
 
-        final mark = _toNullable(_normalizeSpaces(
-          row.querySelector('td.mark strong')?.text ?? row.querySelector('td.mark')?.text ?? '',
-        ));
+        final mark = _extractBestMark(row);
 
         final cabinet = _toNullable(_normalizeSpaces(row.querySelector('span.cabinet')?.text ?? ''));
 
@@ -901,7 +899,9 @@ class SchoolsByWebClient {
 
   String? _readWeekFromNode(dynamic node) {
     if (node == null) return null;
-    final attrs = (node.attributes as Map<String, String>);
+    final attrs = (node.attributes as Map).map(
+      (key, value) => MapEntry(key.toString(), value?.toString() ?? ''),
+    );
 
     for (final key in ['next_week_id', 'prev_week_id', 'send_to', 'href', 'data-week']) {
       final week = _weekFromRef(attrs[key]);
@@ -961,6 +961,80 @@ class SchoolsByWebClient {
     final m = shifted.month.toString().padLeft(2, '0');
     final d = shifted.day.toString().padLeft(2, '0');
     return '$y-$m-$d';
+  }
+
+  String? _extractBestMark(dynamic row) {
+    final markCell = row.querySelector('td.mark');
+    if (markCell == null) return null;
+
+    final candidates = <String>[];
+
+    for (final node in markCell.querySelectorAll('.mark_box, strong, b, em, span, div')) {
+      final text = _normalizeSpaces(node.text ?? '');
+      if (text.isNotEmpty) {
+        candidates.add(text);
+      }
+    }
+
+    if (candidates.isEmpty) {
+      final raw = _normalizeSpaces(markCell.text ?? '');
+      if (raw.isNotEmpty) {
+        candidates.add(raw);
+      }
+    }
+
+    final tokens = <String>[];
+    for (final item in candidates) {
+      for (final token in item.split(RegExp(r'[\s,;]+'))) {
+        final t = token.trim();
+        if (t.isNotEmpty && t != '-' && t != '???') {
+          tokens.add(t);
+        }
+      }
+    }
+
+    if (tokens.isEmpty) return null;
+
+    String bestToken = tokens.first;
+    double bestValue = -1;
+
+    for (final token in tokens) {
+      final value = _parseMarkValue(token);
+      if (value == null) continue;
+      if (value >= bestValue) {
+        bestValue = value;
+        bestToken = token;
+      }
+    }
+
+    return _toNullable(bestToken);
+  }
+
+  double? _parseMarkValue(String raw) {
+    final value = raw.trim().replaceAll(',', '.');
+    if (value.isEmpty) return null;
+
+    if (value.contains('/')) {
+      final parts = value.split('/');
+      if (parts.length == 2) {
+        final a = double.tryParse(parts.first);
+        final b = double.tryParse(parts.last);
+        if (a != null && b != null) {
+          return (a + b) / 2;
+        }
+      }
+    }
+
+    final direct = double.tryParse(value);
+    if (direct != null) return direct;
+
+    final allNums = RegExp(r'\d+(\.\d+)?')
+        .allMatches(value)
+        .map((m) => double.tryParse(m.group(0)!))
+        .whereType<double>()
+        .toList();
+    if (allNums.isEmpty) return null;
+    return allNums.reduce((a, b) => a > b ? a : b);
   }
 }
 

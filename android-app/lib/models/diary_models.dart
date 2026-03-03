@@ -87,25 +87,30 @@ class LessonDto {
     final raw = (mark ?? '').trim();
     if (raw.isEmpty) return null;
 
-    if (raw.contains('/')) {
-      final parts = raw.split('/');
+    final normalized = raw.replaceAll(',', '.');
+
+    if (normalized.contains('/')) {
+      final parts = normalized.split('/');
       if (parts.length == 2) {
-        final left = double.tryParse(parts.first.replaceAll(',', '.'));
-        final right = double.tryParse(parts.last.replaceAll(',', '.'));
+        final left = double.tryParse(parts.first);
+        final right = double.tryParse(parts.last);
         if (left != null && right != null) {
           return ((left + right) / 2).round();
         }
       }
     }
 
-    final direct = int.tryParse(raw);
+    final direct = int.tryParse(normalized);
     if (direct != null) return direct;
 
-    final number = RegExp(r'\d+([\.,]\d+)?').firstMatch(raw)?.group(0);
-    if (number == null) return null;
-    final parsed = double.tryParse(number.replaceAll(',', '.'));
-    if (parsed == null) return null;
-    return parsed.round();
+    final numbers = RegExp(r'\d+(\.\d+)?')
+        .allMatches(normalized)
+        .map((m) => double.tryParse(m.group(0)!))
+        .whereType<double>()
+        .toList();
+    if (numbers.isEmpty) return null;
+    final best = numbers.reduce((a, b) => a > b ? a : b);
+    return best.round();
   }
 
   String get safeSubject {
@@ -193,9 +198,34 @@ int todayHomeworkCount(List<WeekDto> weeks, DateTime now) {
   return lessons.where((item) => (item.hw ?? '').trim().isNotEmpty).length;
 }
 
+int currentWeekIndex(List<WeekDto> weeks, DateTime now) {
+  if (weeks.isEmpty) return 0;
+
+  final today = _isoDate(now);
+  final byToday = weeks.indexWhere((week) => week.days.any((day) => day.date == today));
+  if (byToday >= 0) return byToday;
+
+  var bestIndex = 0;
+  DateTime? bestDate;
+  for (var i = 0; i < weeks.length; i++) {
+    final date = DateTime.tryParse(weeks[i].monday);
+    if (date == null) continue;
+
+    if (date.isBefore(now) || date.isAtSameMomentAs(now)) {
+      if (bestDate == null || date.isAfter(bestDate)) {
+        bestDate = date;
+        bestIndex = i;
+      }
+    }
+  }
+
+  if (bestDate != null) return bestIndex;
+
+  return weeks.length - 1;
+}
+
 List<LessonDto> _findTodayLessons(List<WeekDto> weeks, DateTime now) {
-  final today =
-      '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  final today = _isoDate(now);
 
   for (final week in weeks) {
     for (final day in week.days) {
@@ -203,6 +233,10 @@ List<LessonDto> _findTodayLessons(List<WeekDto> weeks, DateTime now) {
     }
   }
   return const [];
+}
+
+String _isoDate(DateTime date) {
+  return '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 }
 
 List<(String, String)> recentMarks(List<WeekDto> weeks) {
