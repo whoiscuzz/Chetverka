@@ -73,6 +73,7 @@ export class SchoolsByClient {
       }
     }
 
+    //error
     const weeks = [...weeksMap.values()].sort((a, b) => a.monday.localeCompare(b.monday));
     return { weeks };
   }
