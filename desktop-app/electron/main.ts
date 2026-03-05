@@ -7,6 +7,7 @@ import { readSessionStore, writeSessionStore } from "./store";
 let mainWindow: BrowserWindow | null = null;
 const schoolsClient = new SchoolsByClient();
 
+//im ok
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1360,
