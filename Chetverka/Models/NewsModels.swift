@@ -41,6 +41,7 @@ struct NewsItem: Codable, Identifiable, Equatable {
     }
 }
 
+//double itt
 struct CreateNewsPayload: Encodable {
     let title: String
     let body: String
